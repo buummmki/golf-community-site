@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRounds } from '../hooks/useRounds';
-import { useAuth } from '@clerk/clerk-react';
+import { useUser } from '@clerk/clerk-react';
 
 interface RoundFormProps {
   isOpen: boolean;
@@ -9,7 +9,7 @@ interface RoundFormProps {
 
 const RoundForm: React.FC<RoundFormProps> = ({ isOpen, onClose }) => {
   const { createRound } = useRounds();
-  const { user } = useAuth();
+  const { user } = useUser();
   const [loading, setLoading] = useState(false);
   
   const [formData, setFormData] = useState({
@@ -32,7 +32,8 @@ const RoundForm: React.FC<RoundFormProps> = ({ isOpen, onClose }) => {
       const result = await createRound({
         ...formData,
         author_id: user.id,
-        author_name: user.firstName || user.username || '익명'
+        author_name: user.firstName || user.username || '익명',
+        status: 'recruiting'
       });
 
       if (result.success) {

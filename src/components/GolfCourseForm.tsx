@@ -32,7 +32,10 @@ const GolfCourseForm: React.FC<GolfCourseFormProps> = ({ isOpen, onClose }) => {
     setLoading(true);
     
     try {
-      const result = await createGolfCourse(formData);
+      const result = await createGolfCourse({
+        ...formData,
+        rating: 0
+      });
 
       if (result.success) {
         setFormData({

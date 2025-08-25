@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { usePosts } from '../hooks/usePosts';
-import { useAuth } from '@clerk/clerk-react';
+import { useUser } from '@clerk/clerk-react';
 
 interface PostFormProps {
   isOpen: boolean;
@@ -9,7 +9,7 @@ interface PostFormProps {
 
 const PostForm: React.FC<PostFormProps> = ({ isOpen, onClose }) => {
   const { createPost } = usePosts();
-  const { user } = useAuth();
+  const { user } = useUser();
   const [loading, setLoading] = useState(false);
   
   const [formData, setFormData] = useState({

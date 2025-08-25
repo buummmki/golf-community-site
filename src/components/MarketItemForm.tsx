@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMarket } from '../hooks/useMarket';
-import { useAuth } from '@clerk/clerk-react';
+import { useUser } from '@clerk/clerk-react';
 
 interface MarketItemFormProps {
   isOpen: boolean;
@@ -9,15 +9,23 @@ interface MarketItemFormProps {
 
 const MarketItemForm: React.FC<MarketItemFormProps> = ({ isOpen, onClose }) => {
   const { createMarketItem } = useMarket();
-  const { user } = useAuth();
+  const { user } = useUser();
   const [loading, setLoading] = useState(false);
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    description: string;
+    price: number;
+    category: string;
+    condition: '새상품' | '최상' | '상' | '중' | '하';
+    brand: string;
+    image_url: string;
+  }>({
     title: '',
     description: '',
     price: 0,
     category: 'driver',
-    condition: 'good',
+    condition: '상',
     brand: '',
     image_url: ''
   });
@@ -52,7 +60,7 @@ const MarketItemForm: React.FC<MarketItemFormProps> = ({ isOpen, onClose }) => {
         ...formData,
         seller_id: user.id,
         seller_name: user.firstName || user.username || '익명',
-        status: 'available'
+        status: '판매중'
       });
 
       if (result.success) {
@@ -61,7 +69,7 @@ const MarketItemForm: React.FC<MarketItemFormProps> = ({ isOpen, onClose }) => {
           description: '',
           price: 0,
           category: 'driver',
-          condition: 'good',
+          condition: '상',
           brand: '',
           image_url: ''
         });

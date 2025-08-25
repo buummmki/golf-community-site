@@ -63,7 +63,7 @@ export function useMarket() {
   }
 
   // 상품 상태 업데이트 (판매중/판매완료)
-  const updateMarketItemStatus = async (itemId: string, status: 'available' | 'sold') => {
+  const updateMarketItemStatus = async (itemId: string, status: '판매중' | '거래완료') => {
     try {
       const { error } = await supabase
         .from(TABLES.MARKET_ITEMS)

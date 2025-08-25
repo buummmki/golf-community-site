@@ -1,4 +1,6 @@
-// Empty PostCSS config to prevent Tailwind processing
 module.exports = {
-  plugins: []
+  plugins: [
+    require('tailwindcss'),
+    require('autoprefixer'),
+  ]
 };

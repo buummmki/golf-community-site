@@ -6,10 +6,10 @@ const Market = () => {
   const { marketItems, loading, error, updateMarketItemStatus } = useMarket();
   const [isMarketItemFormOpen, setIsMarketItemFormOpen] = useState(false);
 
-  const handleStatusUpdate = async (itemId: string, status: 'available' | 'sold') => {
+  const handleStatusUpdate = async (itemId: string, status: '판매중' | '거래완료') => {
     const result = await updateMarketItemStatus(itemId, status);
     if (result.success) {
-      alert(status === 'sold' ? '판매완료로 변경되었습니다!' : '판매중으로 변경되었습니다!');
+      alert(status === '거래완료' ? '판매완료로 변경되었습니다!' : '판매중으로 변경되었습니다!');
     } else {
       alert(result.error || '상태 변경에 실패했습니다.');
     }
@@ -66,11 +66,11 @@ const Market = () => {
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-semibold text-gray-900 truncate">{item.title}</h3>
                     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                      item.status === 'available' 
+                      item.status === '판매중' 
                         ? 'bg-green-100 text-green-800' 
                         : 'bg-red-100 text-red-800'
                     }`}>
-                      {item.status === 'available' ? '판매중' : '판매완료'}
+                      {item.status === '판매중' ? '판매중' : '판매완료'}
                     </span>
                   </div>
                   
@@ -97,11 +97,11 @@ const Market = () => {
 
                   <div className="flex space-x-2">
                     <button className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">
-                      {item.status === 'available' ? '구매 문의' : '판매완료'}
+                      {item.status === '판매중' ? '구매 문의' : '판매완료'}
                     </button>
-                    {item.status === 'available' && (
+                    {item.status === '판매중' && (
                       <button 
-                        onClick={() => handleStatusUpdate(item.id, 'sold')}
+                        onClick={() => handleStatusUpdate(item.id, '거래완료')}
                         className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50"
                         title="판매완료로 변경"
                       >

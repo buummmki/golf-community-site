@@ -55,6 +55,12 @@ export interface GolfCourse {
   address: string
   green_fee: number
   rating: number
+  description?: string
+  facilities?: string[]
+  image_url?: string
+  holes?: number
+  par?: number
+  phone?: string
   created_at: string
   updated_at: string
 }
@@ -66,6 +72,8 @@ export interface MarketItem {
   price: number
   category: string
   condition: '새상품' | '최상' | '상' | '중' | '하'
+  brand?: string;
+  image_url?: string;
   seller_id: string
   seller_name: string
   status: '판매중' | '거래완료'
