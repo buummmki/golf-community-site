@@ -71,9 +71,9 @@ const Home = () => {
             }}>
               LOOP
             </div>
-          </h1>
-
-          {/* Subtitle */}
+            </h1>
+            
+            {/* Subtitle */}
           <p style={{
             fontSize: 'clamp(1.25rem, 3vw, 2rem)',
             marginBottom: '3rem',
@@ -139,7 +139,7 @@ const Home = () => {
             </div>
           </div>
 
-          {/* CTA Buttons */}
+            {/* CTA Buttons */}
           <div style={{
             display: 'flex',
             flexDirection: 'column',
@@ -148,10 +148,10 @@ const Home = () => {
             alignItems: 'center',
             marginBottom: '4rem'
           }}>
-            {isSignedIn ? (
-              <>
-                <Link
-                  to="/posts"
+              {isSignedIn ? (
+                <>
+                  <Link
+                    to="/posts"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -180,9 +180,9 @@ const Home = () => {
                   <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                </Link>
-                <Link
-                  to="/rounds"
+                  </Link>
+                  <Link
+                    to="/rounds"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -213,11 +213,11 @@ const Home = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                   </svg>
                   <span>라운딩 매칭</span>
-                </Link>
-              </>
-            ) : (
-              <>
-                <SignInButton>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <SignInButton>
                   <button style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -247,10 +247,10 @@ const Home = () => {
                     <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
-                  </button>
-                </SignInButton>
-                <Link
-                  to="/golf-courses"
+                    </button>
+                  </SignInButton>
+                  <Link
+                    to="/golf-courses"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -282,10 +282,10 @@ const Home = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                   <span>골프장 둘러보기</span>
-                </Link>
-              </>
-            )}
-          </div>
+                  </Link>
+                </>
+              )}
+            </div>
 
           {/* Feature Cards */}
           <div style={{
@@ -388,7 +388,7 @@ const Home = () => {
                 lineHeight: '1.6',
                 textAlign: 'center'
               }}>전국 최고급 골프장 정보와 실시간 예약 서비스를 제공합니다</p>
-            </div>
+              </div>
 
             <div style={{
               padding: '2rem',
