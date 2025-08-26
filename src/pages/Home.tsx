@@ -8,712 +8,622 @@ const Home = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%)',
-      position: 'relative',
-      overflow: 'hidden'
+      background: '#f8fafc',
+      paddingBottom: '5rem' // Bottom navigation 공간
     }}>
-      {/* Hero Section */}
+      {/* Mobile Header */}
       <div style={{
-        position: 'relative',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '0 1rem',
-        textAlign: 'center'
+        background: 'linear-gradient(135deg, #065f46, #047857)',
+        color: 'white',
+        padding: '1rem',
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          {/* Premium Badge */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            padding: '0.5rem 1.5rem',
-            borderRadius: '9999px',
-            background: 'rgba(34, 197, 94, 0.2)',
-            border: '1px solid rgba(34, 197, 94, 0.3)',
-            backdropFilter: 'blur(10px)',
-            marginBottom: '2rem'
-          }}>
-            <span style={{
-              color: '#86efac',
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <div>
+            <h1 style={{
+              fontSize: '1.5rem',
+              fontWeight: '700',
+              margin: 0
+            }}>GOLF LOOP</h1>
+            <p style={{
               fontSize: '0.875rem',
-              fontWeight: '600',
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase'
-            }}>
-              Premium Golf Community
-            </span>
+              margin: 0,
+              opacity: 0.8
+            }}>프리미엄 골프 커뮤니티</p>
           </div>
+          {!isSignedIn && (
+            <SignInButton>
+              <button style={{
+                background: 'rgba(255,255,255,0.2)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                color: 'white',
+                padding: '0.5rem 1rem',
+                borderRadius: '0.5rem',
+                fontSize: '0.875rem',
+                cursor: 'pointer'
+              }}>
+                로그인
+              </button>
+            </SignInButton>
+          )}
+        </div>
+      </div>
 
-          {/* Main Title */}
-          <h1 style={{
-            fontSize: 'clamp(3rem, 8vw, 8rem)',
-            fontWeight: '900',
-            marginBottom: '2rem',
-            lineHeight: '0.9',
-            color: 'white',
-            textShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
-          }}>
+      {/* Main Content */}
+      <div style={{ padding: '1rem' }}>
+        {/* 빠른 액세스 카드 */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '1rem',
+          marginBottom: '2rem'
+        }}>
+          <Link to="/posts" style={{ textDecoration: 'none' }}>
             <div style={{
-              background: 'linear-gradient(to right, #ffffff, #bbf7d0, #6ee7b7)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
+              background: 'white',
+              borderRadius: '1rem',
+              padding: '1.5rem',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+              border: '1px solid #e2e8f0',
+              textAlign: 'center',
+              transition: 'all 0.2s',
+              minHeight: '120px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.02)';
+              e.currentTarget.style.boxShadow = '0 4px 20px rgba(16, 185, 129, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
             }}>
-              GOLF
+              <div style={{
+                width: '3rem',
+                height: '3rem',
+                background: 'linear-gradient(135deg, #10b981, #059669)',
+                borderRadius: '0.75rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 0.75rem auto'
+              }}>
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                </svg>
+              </div>
+              <h3 style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1f2937',
+                margin: '0 0 0.25rem 0'
+              }}>게시판</h3>
+              <p style={{
+                fontSize: '0.75rem',
+                color: '#6b7280',
+                margin: 0
+              }}>골프 후기 & 정보</p>
             </div>
-            <div style={{
-              background: 'linear-gradient(to right, #34d399, #10b981, #059669)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              marginTop: '-1rem'
-            }}>
-              LOOP
-            </div>
-            </h1>
-            
-            {/* Subtitle */}
-          <p style={{
-            fontSize: 'clamp(1.25rem, 3vw, 2rem)',
-            marginBottom: '3rem',
-            maxWidth: '800px',
-            margin: '0 auto 3rem auto',
-            color: 'rgba(255, 255, 255, 0.9)',
-            fontWeight: '300',
-            lineHeight: '1.6'
-          }}>
-            <span style={{ fontWeight: '600', color: '#86efac' }}>프리미엄 골프 커뮤니티</span>에서<br />
-            새로운 골프 경험을 시작하세요
-          </p>
+          </Link>
 
-          {/* Stats */}
+          <Link to="/rounds" style={{ textDecoration: 'none' }}>
+            <div style={{
+              background: 'white',
+              borderRadius: '1rem',
+              padding: '1.5rem',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+              border: '1px solid #e2e8f0',
+              textAlign: 'center',
+              transition: 'all 0.2s',
+              minHeight: '120px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.02)';
+              e.currentTarget.style.boxShadow = '0 4px 20px rgba(34, 197, 94, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+            }}>
+              <div style={{
+                width: '3rem',
+                height: '3rem',
+                background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                borderRadius: '0.75rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 0.75rem auto'
+              }}>
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.006 3.006 0 0 0 16.76 6l-2.34.78A6.006 6.006 0 0 1 9 12v10h2v-5h2v5h7z"/>
+                </svg>
+              </div>
+              <h3 style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1f2937',
+                margin: '0 0 0.25rem 0'
+              }}>라운딩</h3>
+              <p style={{
+                fontSize: '0.75rem',
+                color: '#6b7280',
+                margin: 0
+              }}>파트너 매칭</p>
+            </div>
+          </Link>
+
+          <Link to="/golf-courses" style={{ textDecoration: 'none' }}>
+            <div style={{
+              background: 'white',
+              borderRadius: '1rem',
+              padding: '1.5rem',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+              border: '1px solid #e2e8f0',
+              textAlign: 'center',
+              transition: 'all 0.2s',
+              minHeight: '120px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.02)';
+              e.currentTarget.style.boxShadow = '0 4px 20px rgba(6, 182, 212, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+            }}>
+              <div style={{
+                width: '3rem',
+                height: '3rem',
+                background: 'linear-gradient(135deg, #06b6d4, #0891b2)',
+                borderRadius: '0.75rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 0.75rem auto'
+              }}>
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+              </div>
+              <h3 style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1f2937',
+                margin: '0 0 0.25rem 0'
+              }}>골프장</h3>
+              <p style={{
+                fontSize: '0.75rem',
+                color: '#6b7280',
+                margin: 0
+              }}>정보 & 예약</p>
+            </div>
+          </Link>
+
+          <Link to="/market" style={{ textDecoration: 'none' }}>
+            <div style={{
+              background: 'white',
+              borderRadius: '1rem',
+              padding: '1.5rem',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+              border: '1px solid #e2e8f0',
+              textAlign: 'center',
+              transition: 'all 0.2s',
+              minHeight: '120px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.02)';
+              e.currentTarget.style.boxShadow = '0 4px 20px rgba(168, 85, 247, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+            }}>
+              <div style={{
+                width: '3rem',
+                height: '3rem',
+                background: 'linear-gradient(135deg, #a855f7, #9333ea)',
+                borderRadius: '0.75rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 0.75rem auto'
+              }}>
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+              </div>
+              <h3 style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1f2937',
+                margin: '0 0 0.25rem 0'
+              }}>장터</h3>
+              <p style={{
+                fontSize: '0.75rem',
+                color: '#6b7280',
+                margin: 0
+              }}>중고 거래</p>
+            </div>
+          </Link>
+        </div>
+
+        {/* 활동 통계 카드 */}
+        <div style={{
+          background: 'white',
+          borderRadius: '1rem',
+          padding: '1.5rem',
+          marginBottom: '2rem',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+          border: '1px solid #e2e8f0'
+        }}>
+          <h2 style={{
+            fontSize: '1.125rem',
+            fontWeight: '600',
+            color: '#1f2937',
+            marginBottom: '1rem'
+          }}>커뮤니티 현황</h2>
           <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: '2rem',
-            marginBottom: '4rem'
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '1rem'
           }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{
-                fontSize: 'clamp(2rem, 4vw, 3rem)',
+                fontSize: '1.5rem',
                 fontWeight: '700',
-                color: '#86efac',
-                marginBottom: '0.5rem'
-              }}>1,000+</div>
+                color: '#10b981',
+                marginBottom: '0.25rem'
+              }}>1,234</div>
               <div style={{
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontSize: '0.875rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em'
+                fontSize: '0.75rem',
+                color: '#6b7280'
               }}>활성 멤버</div>
             </div>
             <div style={{ textAlign: 'center' }}>
               <div style={{
-                fontSize: 'clamp(2rem, 4vw, 3rem)',
+                fontSize: '1.5rem',
                 fontWeight: '700',
-                color: '#6ee7b7',
-                marginBottom: '0.5rem'
-              }}>500+</div>
+                color: '#3b82f6',
+                marginBottom: '0.25rem'
+              }}>856</div>
               <div style={{
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontSize: '0.875rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em'
-              }}>골프장 정보</div>
+                fontSize: '0.75rem',
+                color: '#6b7280'
+              }}>오늘 게시글</div>
             </div>
             <div style={{ textAlign: 'center' }}>
               <div style={{
-                fontSize: 'clamp(2rem, 4vw, 3rem)',
-                fontWeight: '700',
-                color: '#5eead4',
-                marginBottom: '0.5rem'
-              }}>24/7</div>
-              <div style={{
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontSize: '0.875rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em'
-              }}>커뮤니티 활동</div>
-            </div>
-          </div>
-
-            {/* CTA Buttons */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1.5rem',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBottom: '4rem'
-          }}>
-              {isSignedIn ? (
-                <>
-                  <Link
-                    to="/posts"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '1rem 2.5rem',
-                    fontSize: '1.25rem',
-                    fontWeight: '700',
-                    color: '#000000',
-                    background: 'linear-gradient(to right, #34d399, #10b981, #059669)',
-                    borderRadius: '1rem',
-                    boxShadow: '0 25px 50px -12px rgba(52, 211, 153, 0.5)',
-                    textDecoration: 'none',
-                    transition: 'all 0.3s ease',
-                    gap: '0.75rem'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                    e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(52, 211, 153, 0.7)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(52, 211, 153, 0.5)';
-                  }}
-                >
-                  <span>커뮤니티 입장</span>
-                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                  </Link>
-                  <Link
-                    to="/rounds"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '1rem 2.5rem',
-                    fontSize: '1.25rem',
-                    fontWeight: '700',
-                    color: '#ffffff',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    borderRadius: '1rem',
-                    border: '2px solid rgba(255, 255, 255, 0.3)',
-                    backdropFilter: 'blur(10px)',
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                    textDecoration: 'none',
-                    transition: 'all 0.3s ease',
-                    gap: '0.75rem'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                  }}
-                >
-                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                  </svg>
-                  <span>라운딩 매칭</span>
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <SignInButton>
-                  <button style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '1rem 2.5rem',
-                    fontSize: '1.25rem',
-                    fontWeight: '700',
-                    color: '#000000',
-                    background: 'linear-gradient(to right, #34d399, #10b981, #059669)',
-                    borderRadius: '1rem',
-                    border: 'none',
-                    boxShadow: '0 25px 50px -12px rgba(52, 211, 153, 0.5)',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    gap: '0.75rem'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                    e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(52, 211, 153, 0.7)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(52, 211, 153, 0.5)';
-                  }}
-                  >
-                    <span>지금 시작하기</span>
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                    </button>
-                  </SignInButton>
-                  <Link
-                    to="/golf-courses"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '1rem 2.5rem',
-                    fontSize: '1.25rem',
-                    fontWeight: '700',
-                    color: '#ffffff',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    borderRadius: '1rem',
-                    border: '2px solid rgba(255, 255, 255, 0.3)',
-                    backdropFilter: 'blur(10px)',
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                    textDecoration: 'none',
-                    transition: 'all 0.3s ease',
-                    gap: '0.75rem'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                  }}
-                >
-                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  <span>골프장 둘러보기</span>
-                  </Link>
-                </>
-              )}
-            </div>
-
-          {/* Feature Cards */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '2rem',
-            maxWidth: '1200px',
-            margin: '0 auto'
-          }}>
-            <div style={{
-              padding: '2rem',
-              borderRadius: '1.5rem',
-              background: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              transition: 'all 0.3s ease',
-              cursor: 'pointer'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.border = '1px solid rgba(52, 211, 153, 0.5)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.border = '1px solid rgba(255, 255, 255, 0.2)';
-            }}
-            >
-              <div style={{
-                width: '4rem',
-                height: '4rem',
-                background: 'linear-gradient(135deg, #34d399, #10b981)',
-                borderRadius: '1rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1.5rem',
-                margin: '0 auto 1.5rem auto'
-              }}>
-                <svg width="32" height="32" fill="none" stroke="white" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                </svg>
-              </div>
-              <h3 style={{
                 fontSize: '1.5rem',
                 fontWeight: '700',
-                color: '#ffffff',
-                marginBottom: '1rem',
-                textAlign: 'center'
-              }}>라운딩 매칭</h3>
-              <p style={{
-                color: 'rgba(255, 255, 255, 0.8)',
-                lineHeight: '1.6',
-                textAlign: 'center'
-              }}>AI 기반 매칭 시스템으로 완벽한 골프 파트너를 찾아보세요</p>
-            </div>
-
-            <div style={{
-              padding: '2rem',
-              borderRadius: '1.5rem',
-              background: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              transition: 'all 0.3s ease',
-              cursor: 'pointer'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.border = '1px solid rgba(110, 231, 183, 0.5)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.border = '1px solid rgba(255, 255, 255, 0.2)';
-            }}
-            >
+                color: '#f59e0b',
+                marginBottom: '0.25rem'
+              }}>342</div>
               <div style={{
-                width: '4rem',
-                height: '4rem',
-                background: 'linear-gradient(135deg, #6ee7b7, #14b8a6)',
-                borderRadius: '1rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1.5rem',
-                margin: '0 auto 1.5rem auto'
-              }}>
-                <svg width="32" height="32" fill="none" stroke="white" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <h3 style={{
-                fontSize: '1.5rem',
-                fontWeight: '700',
-                color: '#ffffff',
-                marginBottom: '1rem',
-                textAlign: 'center'
-              }}>프리미엄 골프장</h3>
-              <p style={{
-                color: 'rgba(255, 255, 255, 0.8)',
-                lineHeight: '1.6',
-                textAlign: 'center'
-              }}>전국 최고급 골프장 정보와 실시간 예약 서비스를 제공합니다</p>
-              </div>
-
-            <div style={{
-              padding: '2rem',
-              borderRadius: '1.5rem',
-              background: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              transition: 'all 0.3s ease',
-              cursor: 'pointer'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.border = '1px solid rgba(94, 234, 212, 0.5)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.border = '1px solid rgba(255, 255, 255, 0.2)';
-            }}
-            >
-              <div style={{
-                width: '4rem',
-                height: '4rem',
-                background: 'linear-gradient(135deg, #5eead4, #06b6d4)',
-                borderRadius: '1rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1.5rem',
-                margin: '0 auto 1.5rem auto'
-              }}>
-                <svg width="32" height="32" fill="none" stroke="white" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
-              </div>
-              <h3 style={{
-                fontSize: '1.5rem',
-                fontWeight: '700',
-                color: '#ffffff',
-                marginBottom: '1rem',
-                textAlign: 'center'
-              }}>프리미엄 장터</h3>
-              <p style={{
-                color: 'rgba(255, 255, 255, 0.8)',
-                lineHeight: '1.6',
-                textAlign: 'center'
-              }}>검증된 고급 골프 용품만을 거래하는 안전한 마켓플레이스</p>
+                fontSize: '0.75rem',
+                color: '#6b7280'
+              }}>라운딩 매칭</div>
             </div>
           </div>
         </div>
 
-        {/* Scroll Indicator */}
+        {/* 최근 활동 */}
         <div style={{
-          position: 'absolute',
-          bottom: '2.5rem',
-          left: '50%',
-          transform: 'translateX(-50%)'
+          background: 'white',
+          borderRadius: '1rem',
+          padding: '1.5rem',
+          marginBottom: '2rem',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+          border: '1px solid #e2e8f0'
         }}>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '0.5rem',
-            color: 'rgba(255, 255, 255, 0.6)'
-          }}>
-            <span style={{
-              fontSize: '0.875rem',
-              fontWeight: '500',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em'
-            }}>Scroll Down</span>
-            <div style={{
-              width: '1.5rem',
-              height: '2.5rem',
-              border: '2px solid rgba(255, 255, 255, 0.3)',
-              borderRadius: '9999px',
-              display: 'flex',
-              justifyContent: 'center',
-              position: 'relative'
-            }}>
-              <div style={{
-                width: '0.25rem',
-                height: '0.75rem',
-                background: 'rgba(255, 255, 255, 0.5)',
-                borderRadius: '9999px',
-                marginTop: '0.5rem',
-                animation: 'bounce 1s infinite'
-              }}></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Content Sections */}
-      <div style={{
-        maxWidth: '1280px',
-        margin: '0 auto',
-        padding: '4rem 1rem'
-      }}>
-        {/* 공지사항 */}
-        <section style={{ marginBottom: '4rem' }}>
-          <h2 style={{
-            fontSize: '1.875rem',
-            fontWeight: '700',
-            color: '#ffffff',
-            marginBottom: '2rem'
-          }}>공지사항</h2>
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.95)',
-            borderRadius: '0.5rem',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-          }}>
-            <ul style={{
-              listStyle: 'none',
-              padding: 0,
-              margin: 0
-            }}>
-              <li style={{
-                padding: '1.5rem',
-                borderBottom: '1px solid rgba(229, 231, 235, 1)'
-              }}>
-                <Link to="/posts" style={{
-                  display: 'block',
-                  textDecoration: 'none',
-                  color: 'inherit'
-                }}>
-                  <span style={{
-                    color: '#059669',
-                    fontWeight: '600'
-                  }}>[공지]</span>
-                  <span style={{ marginLeft: '0.5rem' }}>골프 커뮤니티 오픈!</span>
-                  <span style={{
-                    float: 'right',
-                    color: '#6b7280',
-                    fontSize: '0.875rem'
-                  }}>2024-07-25</span>
-                </Link>
-              </li>
-              <li style={{ padding: '1.5rem' }}>
-                <Link to="/posts" style={{
-                  display: 'block',
-                  textDecoration: 'none',
-                  color: 'inherit'
-                }}>
-                  <span style={{
-                    color: '#2563eb',
-                    fontWeight: '600'
-                  }}>[이벤트]</span>
-                  <span style={{ marginLeft: '0.5rem' }}>첫 후기 작성 이벤트!</span>
-                  <span style={{
-                    float: 'right',
-                    color: '#6b7280',
-                    fontSize: '0.875rem'
-                  }}>2024-07-24</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        {/* 최신 후기 */}
-        <section style={{ marginBottom: '4rem' }}>
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '2rem'
+            marginBottom: '1rem'
           }}>
             <h2 style={{
-              fontSize: '1.875rem',
-              fontWeight: '700',
-              color: '#ffffff'
-            }}>최신 후기</h2>
+              fontSize: '1.125rem',
+              fontWeight: '600',
+              color: '#1f2937',
+              margin: 0
+            }}>최근 활동</h2>
             <Link to="/posts" style={{
-              color: '#86efac',
-              textDecoration: 'none',
-              fontWeight: '500'
-            }}>
-              더보기 →
-            </Link>
+              fontSize: '0.875rem',
+              color: '#10b981',
+              textDecoration: 'none'
+            }}>더보기</Link>
+          </div>
+          <div style={{ space: '1rem' }}>
+            {[
+              { title: '남서울CC 컨디션 후기', author: '골프마니아', time: '5분 전', category: '후기' },
+              { title: '이번 주말 스카이72 라운딩', author: '버디킹', time: '12분 전', category: '모집' },
+              { title: '드라이버 추천 부탁드려요', author: '골프초보', time: '25분 전', category: '질문' }
+            ].map((item, index) => (
+              <div key={index} style={{
+                padding: '0.75rem 0',
+                borderBottom: index < 2 ? '1px solid #f1f5f9' : 'none'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  marginBottom: '0.25rem'
+                }}>
+                  <h3 style={{
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    color: '#1f2937',
+                    margin: 0,
+                    lineHeight: '1.4'
+                  }}>{item.title}</h3>
+                  <span style={{
+                    fontSize: '0.75rem',
+                    color: '#6b7280',
+                    whiteSpace: 'nowrap',
+                    marginLeft: '0.5rem'
+                  }}>{item.time}</span>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <span style={{
+                    fontSize: '0.75rem',
+                    color: '#6b7280'
+                  }}>{item.author}</span>
+                  <span style={{
+                    fontSize: '0.6rem',
+                    background: index === 0 ? '#dcfce7' : index === 1 ? '#dbeafe' : '#fef3c7',
+                    color: index === 0 ? '#166534' : index === 1 ? '#1e40af' : '#92400e',
+                    padding: '0.125rem 0.5rem',
+                    borderRadius: '0.25rem'
+                  }}>{item.category}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 추천 골프장 */}
+        <div style={{
+          background: 'white',
+          borderRadius: '1rem',
+          padding: '1.5rem',
+          marginBottom: '2rem',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+          border: '1px solid #e2e8f0'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '1rem'
+          }}>
+            <h2 style={{
+              fontSize: '1.125rem',
+              fontWeight: '600',
+              color: '#1f2937',
+              margin: 0
+            }}>추천 골프장</h2>
+            <Link to="/golf-courses" style={{
+              fontSize: '0.875rem',
+              color: '#10b981',
+              textDecoration: 'none'
+            }}>더보기</Link>
           </div>
           <div style={{
-            background: 'rgba(255, 255, 255, 0.95)',
-            borderRadius: '0.5rem',
-            overflow: 'hidden',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '1rem'
           }}>
-            <table style={{
-              width: '100%',
-              borderCollapse: 'collapse'
-            }}>
-              <thead style={{ background: '#f9fafb' }}>
-                <tr>
-                  <th style={{
-                    padding: '0.75rem 1.5rem',
-                    textAlign: 'left',
-                    fontSize: '0.75rem',
-                    fontWeight: '500',
-                    color: '#6b7280',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em'
-                  }}>지역</th>
-                  <th style={{
-                    padding: '0.75rem 1.5rem',
-                    textAlign: 'left',
-                    fontSize: '0.75rem',
-                    fontWeight: '500',
-                    color: '#6b7280',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em'
-                  }}>골프장명</th>
-                  <th style={{
-                    padding: '0.75rem 1.5rem',
-                    textAlign: 'left',
-                    fontSize: '0.75rem',
-                    fontWeight: '500',
-                    color: '#6b7280',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em'
-                  }}>제목</th>
-                  <th style={{
-                    padding: '0.75rem 1.5rem',
-                    textAlign: 'left',
-                    fontSize: '0.75rem',
-                    fontWeight: '500',
-                    color: '#6b7280',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em'
-                  }}>작성자</th>
-                  <th style={{
-                    padding: '0.75rem 1.5rem',
-                    textAlign: 'left',
-                    fontSize: '0.75rem',
-                    fontWeight: '500',
-                    color: '#6b7280',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em'
-                  }}>날짜</th>
-                  <th style={{
-                    padding: '0.75rem 1.5rem',
-                    textAlign: 'left',
-                    fontSize: '0.75rem',
-                    fontWeight: '500',
-                    color: '#6b7280',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em'
-                  }}>조회수</th>
-                </tr>
-              </thead>
-              <tbody style={{ background: '#ffffff' }}>
-                <tr style={{ borderBottom: '1px solid rgba(229, 231, 235, 1)' }}>
-                  <td style={{
-                    padding: '1rem 1.5rem',
-                    fontSize: '0.875rem',
-                    color: '#111827'
-                  }}>강원</td>
-                  <td style={{
-                    padding: '1rem 1.5rem',
-                    fontSize: '0.875rem',
-                    color: '#111827'
-                  }}>오크밸리CC</td>
-                  <td style={{ padding: '1rem 1.5rem' }}>
-                    <Link to="/posts" style={{
-                      fontSize: '0.875rem',
-                      color: '#2563eb',
-                      textDecoration: 'none'
-                    }}>
-                      오크밸리CC 7월 25일 후기
-                    </Link>
-                  </td>
-                  <td style={{
-                    padding: '1rem 1.5rem',
-                    fontSize: '0.875rem',
-                    color: '#111827'
-                  }}>골프사랑</td>
-                  <td style={{
-                    padding: '1rem 1.5rem',
-                    fontSize: '0.875rem',
-                    color: '#6b7280'
-                  }}>2024-07-25</td>
-                  <td style={{
-                    padding: '1rem 1.5rem',
-                    fontSize: '0.875rem',
-                    color: '#6b7280'
-                  }}>123</td>
-                </tr>
-                <tr>
-                  <td style={{
-                    padding: '1rem 1.5rem',
-                    fontSize: '0.875rem',
-                    color: '#111827'
-                  }}>경기</td>
-                  <td style={{
-                    padding: '1rem 1.5rem',
-                    fontSize: '0.875rem',
-                    color: '#111827'
-                  }}>남서울CC</td>
-                  <td style={{ padding: '1rem 1.5rem' }}>
-                    <Link to="/posts" style={{
-                      fontSize: '0.875rem',
-                      color: '#2563eb',
-                      textDecoration: 'none'
-                    }}>
-                      남서울CC 그린 상태 좋아요
-                    </Link>
-                  </td>
-                  <td style={{
-                    padding: '1rem 1.5rem',
-                    fontSize: '0.875rem',
-                    color: '#111827'
-                  }}>버디왕</td>
-                  <td style={{
-                    padding: '1rem 1.5rem',
-                    fontSize: '0.875rem',
-                    color: '#6b7280'
-                  }}>2024-07-24</td>
-                  <td style={{
-                    padding: '1rem 1.5rem',
-                    fontSize: '0.875rem',
-                    color: '#6b7280'
-                  }}>98</td>
-                </tr>
-              </tbody>
-            </table>
+            {[
+              { name: '스카이힐CC', location: '경기', rating: '4.8' },
+              { name: '오크밸리CC', location: '강원', rating: '4.9' }
+            ].map((course, index) => (
+              <div key={index} style={{
+                border: '1px solid #f1f5f9',
+                borderRadius: '0.5rem',
+                padding: '1rem',
+                textAlign: 'center'
+              }}>
+                <h3 style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '600',
+                  color: '#1f2937',
+                  margin: '0 0 0.25rem 0'
+                }}>{course.name}</h3>
+                <p style={{
+                  fontSize: '0.75rem',
+                  color: '#6b7280',
+                  margin: '0 0 0.5rem 0'
+                }}>{course.location}</p>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.25rem'
+                }}>
+                  <span style={{ color: '#fbbf24', fontSize: '0.875rem' }}>★</span>
+                  <span style={{ fontSize: '0.75rem', color: '#1f2937', fontWeight: '500' }}>
+                    {course.rating}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </div>
+
+      {/* Bottom Navigation - 토스 스타일 */}
+      <div style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: 'white',
+        borderTop: '1px solid #e2e8f0',
+        padding: '0.5rem 0 calc(0.5rem + env(safe-area-inset-bottom))',
+        zIndex: 50,
+        boxShadow: '0 -2px 10px rgba(0,0,0,0.08)'
+      }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(5, 1fr)',
+          gap: '0.5rem',
+          maxWidth: '100%',
+          margin: '0 auto',
+          padding: '0 1rem'
+        }}>
+          <Link to="/" style={{
+            textDecoration: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '0.5rem 0.25rem',
+            borderRadius: '0.5rem',
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#f8fafc';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent';
+          }}>
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#10b981' }}>
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span style={{
+              fontSize: '0.6rem',
+              color: '#10b981',
+              marginTop: '0.25rem',
+              fontWeight: '500'
+            }}>홈</span>
+          </Link>
+
+          <Link to="/posts" style={{
+            textDecoration: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '0.5rem 0.25rem',
+            borderRadius: '0.5rem',
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#f8fafc';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent';
+          }}>
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#6b7280' }}>
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+            </svg>
+            <span style={{
+              fontSize: '0.6rem',
+              color: '#6b7280',
+              marginTop: '0.25rem',
+              fontWeight: '500'
+            }}>게시판</span>
+          </Link>
+
+          <Link to="/rounds" style={{
+            textDecoration: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '0.5rem 0.25rem',
+            borderRadius: '0.5rem',
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#f8fafc';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent';
+          }}>
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#6b7280' }}>
+              <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.006 3.006 0 0 0 16.76 6l-2.34.78A6.006 6.006 0 0 1 9 12v10h2v-5h2v5h7z"/>
+            </svg>
+            <span style={{
+              fontSize: '0.6rem',
+              color: '#6b7280',
+              marginTop: '0.25rem',
+              fontWeight: '500'
+            }}>라운딩</span>
+          </Link>
+
+          <Link to="/golf-courses" style={{
+            textDecoration: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '0.5rem 0.25rem',
+            borderRadius: '0.5rem',
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#f8fafc';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent';
+          }}>
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#6b7280' }}>
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            <span style={{
+              fontSize: '0.6rem',
+              color: '#6b7280',
+              marginTop: '0.25rem',
+              fontWeight: '500'
+            }}>골프장</span>
+          </Link>
+
+          <Link to="/market" style={{
+            textDecoration: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '0.5rem 0.25rem',
+            borderRadius: '0.5rem',
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#f8fafc';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent';
+          }}>
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#6b7280' }}>
+              <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+            <span style={{
+              fontSize: '0.6rem',
+              color: '#6b7280',
+              marginTop: '0.25rem',
+              fontWeight: '500'
+            }}>장터</span>
+          </Link>
+        </div>
       </div>
     </div>
   );
