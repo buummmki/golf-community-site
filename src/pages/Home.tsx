@@ -69,7 +69,7 @@ const Home = () => {
               backgroundClip: 'text',
               marginTop: '-1rem'
             }}>
-              REVOLUTION
+              LOOP
             </div>
           </h1>
 
