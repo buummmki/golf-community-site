@@ -8,12 +8,12 @@ import GolfCourses from './pages/GolfCourses';
 import Market from './pages/Market';
 
 // 보호된 링크 컴포넌트
-function ProtectedLink({ to, children, className }: { to: string; children: React.ReactNode; className: string }) {
+function ProtectedLink({ to, children, className, style }: { to: string; children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
   const { isSignedIn } = useAuth();
 
   if (isSignedIn) {
     return (
-      <Link to={to} className={className}>
+      <Link to={to} className={className} style={style}>
         {children}
       </Link>
     );
@@ -21,7 +21,7 @@ function ProtectedLink({ to, children, className }: { to: string; children: Reac
 
   return (
     <SignInButton>
-      <button className={className}>
+      <button className={className} style={style}>
         {children}
       </button>
     </SignInButton>
@@ -68,41 +68,183 @@ function Navbar() {
   const { isSignedIn } = useAuth();
 
   return (
-    <nav className="bg-white shadow-lg">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex justify-between items-center py-4">
-          <Link to="/" className="text-2xl font-bold text-green-600">
-            골프 커뮤니티
+    <nav style={{
+      background: 'rgba(255, 255, 255, 0.95)',
+      backdropFilter: 'blur(10px)',
+      borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+      position: 'sticky',
+      top: 0,
+      zIndex: 50,
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+    }}>
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 1rem'
+      }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '1rem 0'
+        }}>
+          {/* Logo */}
+          <Link to="/" style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            textDecoration: 'none',
+            fontSize: '1.5rem',
+            fontWeight: '800',
+            background: 'linear-gradient(135deg, #059669, #10b981)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="#059669" strokeWidth="2" fill="none"/>
+              <path d="M8 12l2 2 4-4" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            GOLF LOOP
           </Link>
-          <div className="flex items-center space-x-6">
-            <Link to="/" className="text-gray-700 hover:text-green-600">
+
+          {/* Navigation Menu */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '2rem'
+          }}>
+            <Link to="/" style={{
+              textDecoration: 'none',
+              color: '#374151',
+              fontWeight: '500',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#059669';
+              e.currentTarget.style.background = 'rgba(5, 150, 105, 0.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#374151';
+              e.currentTarget.style.background = 'transparent';
+            }}
+            >
               홈
             </Link>
-            <ProtectedLink to="/posts" className="text-gray-700 hover:text-green-600">
+            <ProtectedLink to="/posts" className="nav-link" style={{
+              textDecoration: 'none',
+              color: '#374151',
+              fontWeight: '500',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              transition: 'all 0.3s ease',
+              border: 'none',
+              background: 'transparent',
+              cursor: 'pointer'
+            }}>
               게시판
             </ProtectedLink>
-            <ProtectedLink to="/rounds" className="text-gray-700 hover:text-green-600">
+            <ProtectedLink to="/rounds" className="nav-link" style={{
+              textDecoration: 'none',
+              color: '#374151',
+              fontWeight: '500',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              transition: 'all 0.3s ease',
+              border: 'none',
+              background: 'transparent',
+              cursor: 'pointer'
+            }}>
               라운딩 모집
             </ProtectedLink>
-            <ProtectedLink to="/golf-courses" className="text-gray-700 hover:text-green-600">
+            <ProtectedLink to="/golf-courses" className="nav-link" style={{
+              textDecoration: 'none',
+              color: '#374151',
+              fontWeight: '500',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              transition: 'all 0.3s ease',
+              border: 'none',
+              background: 'transparent',
+              cursor: 'pointer'
+            }}>
               골프장 정보
             </ProtectedLink>
-            <ProtectedLink to="/market" className="text-gray-700 hover:text-green-600">
+            <ProtectedLink to="/market" className="nav-link" style={{
+              textDecoration: 'none',
+              color: '#374151',
+              fontWeight: '500',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              transition: 'all 0.3s ease',
+              border: 'none',
+              background: 'transparent',
+              cursor: 'pointer'
+            }}>
               중고 장터
             </ProtectedLink>
           </div>
 
-          {/* 인증 버튼 */}
-          <div className="flex items-center space-x-4">
+          {/* Auth Buttons */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem'
+          }}>
             {!isSignedIn ? (
-              <div className="flex items-center space-x-4">
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem'
+              }}>
                 <SignInButton>
-                  <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                  <button style={{
+                    background: 'linear-gradient(135deg, #059669, #10b981)',
+                    color: 'white',
+                    border: 'none',
+                    padding: '0.75rem 1.5rem',
+                    borderRadius: '0.75rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 6px -1px rgba(5, 150, 105, 0.3)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 8px 15px -3px rgba(5, 150, 105, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(5, 150, 105, 0.3)';
+                  }}
+                  >
                     로그인
                   </button>
                 </SignInButton>
                 <SignUpButton>
-                  <button className="border border-green-600 text-green-600 hover:bg-green-50 px-4 py-2 rounded-lg">
+                  <button style={{
+                    background: 'transparent',
+                    color: '#059669',
+                    border: '2px solid #059669',
+                    padding: '0.75rem 1.5rem',
+                    borderRadius: '0.75rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = '#059669';
+                    e.currentTarget.style.color = 'white';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = '#059669';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                  >
                     회원가입
                   </button>
                 </SignUpButton>
@@ -120,7 +262,7 @@ function Navbar() {
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
+      <div style={{ minHeight: '100vh' }}>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -129,7 +271,7 @@ function App() {
           <Route path="/golf-courses" element={<ProtectedRoute><GolfCourses /></ProtectedRoute>} />
           <Route path="/market" element={<ProtectedRoute><Market /></ProtectedRoute>} />
         </Routes>
-    </div>
+      </div>
     </Router>
   );
 }
