@@ -12,7 +12,7 @@ const Home = () => {
       paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))',
       WebkitOverflowScrolling: 'touch'
     }}>
-      {/* Mobile Header */}
+            {/* Mobile Header - 네이버 스타일 */}
       <div style={{
         background: 'white',
         color: '#1f2937',
@@ -29,6 +29,21 @@ const Home = () => {
           alignItems: 'center',
           maxWidth: '100%'
         }}>
+          {/* 왼쪽: 햄버거 메뉴 */}
+          <div style={{
+            width: '2rem',
+            height: '2rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer'
+          }}>
+            <svg width="20" height="20" fill="#1f2937" viewBox="0 0 24 24">
+              <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+          </div>
+
+          {/* 중앙: GOLF LOOP 로고 */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <div style={{
               width: '2rem',
@@ -50,46 +65,21 @@ const Home = () => {
               color: '#1f2937'
             }}>GOLF LOOP</h1>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{
-              width: '2rem',
-              height: '2rem',
-              background: '#f3f4f6',
-              borderRadius: '0.5rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative'
-            }}>
-              <svg width="16" height="16" fill="#6b7280" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-              </svg>
-            </div>
-            <div style={{
-              width: '2rem',
-              height: '2rem',
-              background: '#f3f4f6',
-                borderRadius: '0.5rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative'
-            }}>
-              <svg width="16" height="16" fill="#6b7280" viewBox="0 0 24 24">
-                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
-              </svg>
-              <div style={{
-                position: 'absolute',
-                top: '-2px',
-                right: '-2px',
-                width: '8px',
-                height: '8px',
-                background: '#ef4444',
-                borderRadius: '50%'
-              }}></div>
-            </div>
+
+          {/* 오른쪽: 햄버거 메뉴 */}
+          <div style={{
+            width: '2rem',
+            height: '2rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer'
+          }}>
+            <svg width="20" height="20" fill="#1f2937" viewBox="0 0 24 24">
+              <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
           </div>
-            </div>
+        </div>
       </div>
 
       {/* Main Content */}
