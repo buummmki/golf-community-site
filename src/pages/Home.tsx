@@ -123,9 +123,18 @@ const Home = () => {
                   padding: '0.75rem 1rem',
                   color: '#1f2937',
                   textDecoration: 'none',
-                  fontSize: '0.875rem'
+                  fontSize: '0.875rem',
+                  borderBottom: '1px solid #f3f4f6'
                 }}
                 onClick={() => setIsMenuOpen(false)}>골프장정보</Link>
+                <Link to="/market" style={{
+                  display: 'block',
+                  padding: '0.75rem 1rem',
+                  color: '#1f2937',
+                  textDecoration: 'none',
+                  fontSize: '0.875rem'
+                }}
+                onClick={() => setIsMenuOpen(false)}>중고 장터</Link>
               </div>
             )}
           </div>

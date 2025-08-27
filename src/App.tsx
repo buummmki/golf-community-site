@@ -263,7 +263,6 @@ function App() {
   return (
     <Router>
       <div style={{ minHeight: '100vh' }}>
-        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/posts" element={<ProtectedRoute><Posts /></ProtectedRoute>} />
