@@ -9,8 +9,8 @@ const Home = () => {
   return (
     <div 
       style={{
-        minHeight: '100vh',
-        background: '#f8fafc',
+      minHeight: '100vh',
+      background: '#f8fafc',
         paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))',
         WebkitOverflowScrolling: 'touch'
       }}
@@ -159,7 +159,7 @@ const Home = () => {
                       cursor: 'pointer'
                     }}
                     onClick={() => setIsMenuOpen(false)}>
-                      로그인
+                로그인
                     </button>
                   </SignInButton>
                 ) : (
@@ -199,7 +199,7 @@ const Home = () => {
               </div>
             )}
           </div>
-        </div>
+            </div>
       </div>
 
       {/* Main Content */}
@@ -271,17 +271,6 @@ const Home = () => {
               cursor: 'pointer',
               width: '100%'
             }}>지금 시작하기</button>
-            <button style={{
-              position: 'absolute',
-              top: '1rem',
-              right: '1rem',
-              background: 'none',
-              border: 'none',
-              fontSize: '1.25rem',
-              color: '#9ca3af',
-              cursor: 'pointer',
-              padding: '0.25rem'
-            }}>×</button>
           </div>
         </div>
 
@@ -651,7 +640,7 @@ const Home = () => {
               marginTop: '0.25rem',
               fontWeight: '500'
             }}>골프장</span>
-          </Link>
+                </Link>
 
           <div style={{
             textDecoration: 'none',
