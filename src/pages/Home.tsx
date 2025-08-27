@@ -651,9 +651,9 @@ const Home = () => {
               marginTop: '0.25rem',
               fontWeight: '500'
             }}>골프장</span>
-                </Link>
+          </Link>
 
-          <Link to="/market" style={{
+          <div style={{
             textDecoration: 'none',
             display: 'flex',
             flexDirection: 'column',
@@ -663,7 +663,13 @@ const Home = () => {
             minHeight: '44px',
             justifyContent: 'center',
             WebkitTapHighlightColor: 'transparent',
-            touchAction: 'manipulation'
+            touchAction: 'manipulation',
+            cursor: 'pointer',
+            position: 'relative'
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsMenuOpen(!isMenuOpen);
           }}>
             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#6b7280' }}>
               <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
@@ -674,7 +680,7 @@ const Home = () => {
               marginTop: '0.25rem',
               fontWeight: '500'
             }}>전체</span>
-            </Link>
+          </div>
           </div>
       </div>
     </div>
