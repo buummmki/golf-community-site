@@ -1,76 +1,196 @@
-import React, { useState } from 'react';
-
-const sampleRounds = [
-  {
-    id: 1,
-    title: "주말 조조 라운딩 모집",
-    golf_course: "오크밸리CC",
-    date: "2024-08-03",
-    time: "06:30",
-    description: "조조 티타임으로 시원한 아침 라운딩 즐겨요! 초급~중급자 수준이시면 누구나 환영합니다.",
-    organizer: "골프매니아",
-    participants: 2,
-    max_participants: 4,
-    green_fee: "15만원",
-    status: "모집중",
-    region: "강원"
-  },
-  {
-    id: 2,
-    title: "남서울CC 4인 라운딩",
-    golf_course: "남서울CC",
-    date: "2024-08-05",
-    time: "11:00",
-    description: "남서울에서 11시 티타임, 매너 좋으신 분 1명 추가 모집해요.",
-    organizer: "남서울단골",
-    participants: 3,
-    max_participants: 4,
-    green_fee: "12만원",
-    status: "모집중",
-    region: "경기"
-  },
-  {
-    id: 3,
-    title: "제주 핀크스CC 골프여행",
-    golf_course: "핀크스CC",
-    date: "2024-08-15",
-    time: "09:00",
-    description: "제주도 골프여행 2박3일 일정입니다. 숙박, 렌트카 모두 준비되어 있어요.",
-    organizer: "제주여행러",
-    participants: 2,
-    max_participants: 4,
-    green_fee: "35만원",
-    status: "모집중",
-    region: "제주"
-  },
-  {
-    id: 4,
-    title: "평일 할인 라운딩",
-    golf_course: "파인리즈CC",
-    date: "2024-07-30",
-    time: "13:30",
-    description: "화요일 오후 평일 할인 혜택으로 저렴하게 라운딩해요.",
-    organizer: "평일골퍼",
-    participants: 4,
-    max_participants: 4,
-    green_fee: "8만원",
-    status: "모집마감",
-    region: "경기"
-  }
-];
+import React, { useState, useEffect } from 'react';
+import { useRounds } from '../hooks/useRounds';
+import { useAuth } from '@clerk/clerk-react';
+import RoundForm from '../components/RoundForm';
+import { Round } from '../lib/supabase';
 
 const Rounds = () => {
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState('전체');
+  const [selectedStatus, setSelectedStatus] = useState('전체');
+  const [isRoundFormOpen, setIsRoundFormOpen] = useState(false);
+  const [userParticipations, setUserParticipations] = useState<Set<string>>(new Set());
+  const { isSignedIn, userId } = useAuth();
+  
+  const {
+    rounds,
+    loading,
+    error,
+    createRound,
+    joinRound,
+    leaveRound,
+    getRoundsByRegion,
+    getRoundsByStatus,
+    isUserParticipating,
+  } = useRounds();
+
+  const regions = ['전체', '경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주', '인천', '서울'];
+  const statuses = ['전체', '모집중', '모집완료', '완료'];
+
+  // 사용자 참여 상태 확인
+  useEffect(() => {
+    if (!userId || rounds.length === 0) return;
+
+    const checkUserParticipations = async () => {
+      const participationPromises = rounds.map(async (round) => {
+        const isParticipating = await isUserParticipating(round.id);
+        return { roundId: round.id, isParticipating };
+      });
+
+      const results = await Promise.all(participationPromises);
+      const participatingRounds = new Set(
+        results.filter(result => result.isParticipating).map(result => result.roundId)
+      );
+      
+      setUserParticipations(participatingRounds);
+    };
+
+    checkUserParticipations();
+  }, [rounds, userId, isUserParticipating]);
+
+  const filteredRounds = rounds.filter(round => {
+    const regionMatch = selectedRegion === '전체' || round.region === selectedRegion;
+    const statusMatch = selectedStatus === '전체' || 
+      (selectedStatus === '모집중' && round.status === 'recruiting') ||
+      (selectedStatus === '모집완료' && round.status === 'full') ||
+      (selectedStatus === '완료' && round.status === 'completed');
+    
+    // 과거 날짜 필터링 (완료된 라운딩만 표시)
+    const roundDate = new Date(round.date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const isUpcoming = roundDate >= today;
+    
+    return regionMatch && statusMatch && (isUpcoming || round.status === 'completed');
+  });
+
+  const sortedRounds = [...filteredRounds].sort((a, b) => {
+    // 상태별 우선순위: 모집중 > 모집완료 > 완료
+    const statusPriority = { recruiting: 3, full: 2, completed: 1 };
+    if (statusPriority[a.status] !== statusPriority[b.status]) {
+      return statusPriority[b.status] - statusPriority[a.status];
+    }
+    
+    // 같은 상태면 날짜순
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
+
+  const handleJoinRound = async (roundId: string) => {
+    if (!isSignedIn) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
+    const result = await joinRound(roundId);
+    if (result.success) {
+      setUserParticipations(prev => new Set([...prev, roundId]));
+      alert('라운딩 참여 신청이 완료되었습니다!');
+    } else {
+      alert(result.error || '라운딩 참여에 실패했습니다.');
+    }
+  };
+
+  const handleLeaveRound = async (roundId: string) => {
+    const result = await leaveRound(roundId);
+    if (result.success) {
+      setUserParticipations(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(roundId);
+        return newSet;
+      });
+      alert('라운딩 참여를 취소했습니다.');
+    } else {
+      alert(result.error || '라운딩 탈퇴에 실패했습니다.');
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const days = ['일', '월', '화', '수', '목', '금', '토'];
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const dayOfWeek = days[date.getDay()];
+    
+    return `${month}월 ${day}일 (${dayOfWeek})`;
+  };
+
+  const formatTime = (timeString: string) => {
+    const [hours, minutes] = timeString.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? '오후' : '오전';
+    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+    
+    return `${ampm} ${displayHour}:${minutes}`;
+  };
+
+  const getStatusBadge = (round: Round) => {
+    const statusInfo = {
+      recruiting: { text: '모집중', color: '#10b981', bgColor: '#dcfce7' },
+      full: { text: '모집완료', color: '#f59e0b', bgColor: '#fef3c7' },
+      completed: { text: '완료', color: '#6b7280', bgColor: '#f3f4f6' }
+    };
+
+    const info = statusInfo[round.status];
+    
+    return (
+      <span style={{
+        background: info.bgColor,
+        color: info.color,
+        padding: '0.25rem 0.75rem',
+        borderRadius: '1rem',
+        fontSize: '0.75rem',
+        fontWeight: '600'
+      }}>
+        {info.text}
+      </span>
+    );
+  };
+
+  if (loading) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        background: 'linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>라운딩 모집을 불러오는 중...</div>
+          <div style={{ fontSize: '1rem', opacity: 0.8 }}>잠시만 기다려주세요</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        background: 'linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>오류가 발생했습니다</div>
+          <div style={{ fontSize: '1rem', opacity: 0.8 }}>{error}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
+      background: 'linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%)',
       paddingTop: '2rem',
-      paddingBottom: '2rem'
+      paddingBottom: '6rem'
     }}>
       <div style={{
-        maxWidth: '1200px',
+        maxWidth: '1280px',
         margin: '0 auto',
         padding: '0 1rem'
       }}>
@@ -79,386 +199,319 @@ const Rounds = () => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '2rem',
-          background: 'rgba(255, 255, 255, 0.9)',
-          padding: '2rem',
-          borderRadius: '1rem',
-          backdropFilter: 'blur(10px)',
+          marginBottom: '3rem',
+          background: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(20px)',
+          padding: '3rem',
+          borderRadius: '2rem',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
         }}>
           <div>
             <h1 style={{
-              fontSize: '2.5rem',
+              fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
               fontWeight: '800',
-              background: 'linear-gradient(135deg, #0ea5e9, #06b6d4)',
+              background: 'linear-gradient(135deg, #ffffff, #f1f5f9)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              marginBottom: '0.5rem'
+              marginBottom: '1rem',
+              lineHeight: '1.1',
+              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))'
             }}>
-              ⛳ 라운딩 모집
+              라운딩 모집
             </h1>
             <p style={{
-              color: '#6b7280',
-              fontSize: '1.1rem'
+              color: 'rgba(255, 255, 255, 0.9)',
+              fontSize: '1.25rem',
+              lineHeight: '1.6',
+              filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))',
+              fontWeight: '400'
             }}>
-              함께 라운딩할 골프 파트너를 찾아보세요
+              완벽한 골프 파트너를 찾아<br />
+              즐거운 라운딩을 함께하세요
             </p>
           </div>
-          <button 
-            onClick={() => setIsFormOpen(true)}
-            style={{
-              background: 'linear-gradient(135deg, #0ea5e9, #06b6d4)',
-              color: 'white',
-              border: 'none',
-              padding: '1rem 2rem',
-              borderRadius: '0.75rem',
-              fontSize: '1.1rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 15px rgba(14, 165, 233, 0.3)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 8px 25px rgba(14, 165, 233, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 15px rgba(14, 165, 233, 0.3)';
-            }}
-          >
-            🏌️ 라운딩 모집하기
-          </button>
+          
+          {isSignedIn && (
+            <button 
+              onClick={() => setIsRoundFormOpen(true)}
+              style={{
+                background: 'linear-gradient(135deg, #10b981, #059669)',
+                color: 'white',
+                border: 'none',
+                padding: '1.25rem 2.5rem',
+                borderRadius: '1rem',
+                fontSize: '1.125rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                boxShadow: '0 8px 25px rgba(16, 185, 129, 0.3)',
+                transition: 'all 0.3s ease',
+                whiteSpace: 'nowrap'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 12px 35px rgba(16, 185, 129, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.3)';
+              }}
+            >
+              + 모집 작성
+            </button>
+          )}
         </div>
 
-        {/* 통계 카드 */}
+        {/* 필터 */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '1rem',
-          marginBottom: '2rem'
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '2rem',
+          marginBottom: '2rem',
+          padding: '2rem',
+          background: 'rgba(255, 255, 255, 0.05)',
+          backdropFilter: 'blur(10px)',
+          borderRadius: '1.5rem',
+          border: '1px solid rgba(255, 255, 255, 0.1)'
         }}>
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.9)',
-            padding: '1.5rem',
-            borderRadius: '1rem',
-            textAlign: 'center',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
-          }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⛳</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#10b981' }}>
-              {sampleRounds.filter(r => r.status === '모집중').length}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <span style={{ color: 'white', fontWeight: '600', fontSize: '1rem' }}>지역:</span>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              {regions.map(region => (
+                <button
+                  key={region}
+                  onClick={() => setSelectedRegion(region)}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    borderRadius: '0.75rem',
+                    border: selectedRegion === region ? '2px solid #10b981' : '1px solid rgba(255, 255, 255, 0.3)',
+                    background: selectedRegion === region ? '#10b981' : 'rgba(255, 255, 255, 0.1)',
+                    color: 'white',
+                    fontSize: '0.875rem',
+                    fontWeight: selectedRegion === region ? '600' : '400',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {region}
+                </button>
+              ))}
             </div>
-            <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>모집중</div>
           </div>
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.9)',
-            padding: '1.5rem',
-            borderRadius: '1rem',
-            textAlign: 'center',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
-          }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🏌️</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#0ea5e9' }}>
-              {sampleRounds.length}
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <span style={{ color: 'white', fontWeight: '600', fontSize: '1rem' }}>상태:</span>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              {statuses.map(status => (
+                <button
+                  key={status}
+                  onClick={() => setSelectedStatus(status)}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    borderRadius: '0.75rem',
+                    border: selectedStatus === status ? '2px solid #10b981' : '1px solid rgba(255, 255, 255, 0.3)',
+                    background: selectedStatus === status ? '#10b981' : 'rgba(255, 255, 255, 0.1)',
+                    color: 'white',
+                    fontSize: '0.875rem',
+                    fontWeight: selectedStatus === status ? '600' : '400',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {status}
+                </button>
+              ))}
             </div>
-            <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>총 라운딩</div>
-          </div>
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.9)',
-            padding: '1.5rem',
-            borderRadius: '1rem',
-            textAlign: 'center',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
-          }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>👥</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#8b5cf6' }}>
-              {sampleRounds.reduce((total, round) => total + round.participants, 0)}
-            </div>
-            <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>총 참가자</div>
           </div>
         </div>
 
         {/* 라운딩 목록 */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-          gap: '1.5rem'
+          gap: '1.5rem',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))'
         }}>
-          {sampleRounds.map((round) => (
-            <div
-              key={round.id}
-              style={{
-                background: 'rgba(255, 255, 255, 0.95)',
-                borderRadius: '1rem',
-                padding: '2rem',
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.boxShadow = '0 12px 30px rgba(0, 0, 0, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
-              }}
-            >
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                marginBottom: '1rem'
-              }}>
+          {sortedRounds.length === 0 ? (
+            <div style={{
+              gridColumn: '1 / -1',
+              textAlign: 'center',
+              padding: '4rem 2rem',
+              background: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '1.5rem',
+              color: 'white'
+            }}>
+              <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>라운딩 모집이 없습니다</div>
+              <div style={{ opacity: 0.8 }}>첫 번째 라운딩을 모집해보세요!</div>
+            </div>
+          ) : (
+            sortedRounds.map((round) => (
+              <div
+                key={round.id}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  borderRadius: '1.5rem',
+                  padding: '2rem',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  transition: 'all 0.3s ease',
+                  backdropFilter: 'blur(20px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 16px 40px rgba(0, 0, 0, 0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+                }}
+              >
+                {/* 헤더 */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{
+                      background: 'linear-gradient(135deg, #10b981, #059669)',
+                      color: 'white',
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '1rem',
+                      fontSize: '0.75rem',
+                      fontWeight: '600'
+                    }}>
+                      {round.region}
+                    </span>
+                    {getStatusBadge(round)}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280', textAlign: 'right' }}>
+                    <div>{formatDate(round.date)}</div>
+                    <div>{formatTime(round.time)}</div>
+                  </div>
+                </div>
+
+                {/* 제목 및 골프장 */}
                 <h3 style={{
-                  fontSize: '1.2rem',
+                  fontSize: '1.25rem',
                   fontWeight: '700',
-                  color: '#111827',
-                  flex: 1
+                  color: '#1f2937',
+                  marginBottom: '0.5rem',
+                  lineHeight: '1.4'
                 }}>
                   {round.title}
                 </h3>
-                <span style={{
-                  background: round.status === '모집중' ? '#10b981' : '#f59e0b',
-                  color: 'white',
-                  padding: '0.25rem 0.75rem',
-                  borderRadius: '1rem',
-                  fontSize: '0.8rem',
-                  fontWeight: '500'
+                
+                <div style={{
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#059669',
+                  marginBottom: '1rem'
                 }}>
-                  {round.status}
-                  </span>
+                  📍 {round.golf_course}
                 </div>
 
-              <div style={{
-                display: 'grid',
-                gap: '0.75rem',
-                marginBottom: '1rem',
-                padding: '1rem',
-                background: '#f8fafc',
-                borderRadius: '0.5rem'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span>🏌️</span>
-                  <span style={{ fontWeight: '600' }}>{round.golf_course}</span>
-                  <span style={{
-                    background: '#e5e7eb',
-                    color: '#374151',
-                    padding: '0.1rem 0.5rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.8rem'
+                {/* 설명 */}
+                {round.description && (
+                  <p style={{
+                    color: '#6b7280',
+                    fontSize: '0.875rem',
+                    lineHeight: '1.6',
+                    marginBottom: '1.5rem',
+                    overflow: 'hidden',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical'
                   }}>
-                    {round.region}
-                  </span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span>📅</span>
-                  <span>{new Date(round.date).toLocaleDateString('ko-KR')} {round.time}</span>
-                  </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span>💰</span>
-                  <span style={{ fontWeight: '600', color: '#059669' }}>{round.green_fee}</span>
-                  </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span>👥</span>
-                  <span>{round.participants}/{round.max_participants}명</span>
-                  </div>
-                </div>
+                    {round.description}
+                  </p>
+                )}
 
-              <p style={{
-                color: '#6b7280',
-                lineHeight: '1.6',
-                marginBottom: '1.5rem',
-                fontSize: '0.95rem'
-              }}>
-                {round.description}
-              </p>
-
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingTop: '1rem',
-                borderTop: '1px solid #e5e7eb'
-              }}>
-                <span style={{
-                  fontSize: '0.9rem',
-                  color: '#6b7280'
+                {/* 정보 */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, 1fr)',
+                  gap: '1rem',
+                  marginBottom: '1.5rem',
+                  padding: '1rem',
+                  background: '#f8fafc',
+                  borderRadius: '0.75rem'
                 }}>
-                  👤 {round.organizer}
-                </span>
-                {round.status === '모집중' && (
-                  <button style={{
-                    background: 'linear-gradient(135deg, #0ea5e9, #06b6d4)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.9rem',
-                    fontWeight: '600',
-                    cursor: 'pointer'
-                  }}>
-                      참여하기
-                    </button>
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.25rem' }}>참여인원</div>
+                    <div style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937' }}>
+                      {round.current_participants} / {round.max_participants}명
+                    </div>
+                  </div>
+                  {round.green_fee && (
+                    <div>
+                      <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.25rem' }}>그린피</div>
+                      <div style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937' }}>
+                        {round.green_fee}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* 하단 */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  borderTop: '1px solid #f3f4f6',
+                  paddingTop: '1rem'
+                }}>
+                  <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                    모집자: {round.author_name}
+                  </div>
+                  
+                  {isSignedIn && round.status === 'recruiting' && (
+                    <div>
+                      {userParticipations.has(round.id) ? (
+                        <button
+                          onClick={() => handleLeaveRound(round.id)}
+                          style={{
+                            padding: '0.5rem 1rem',
+                            border: '1px solid #ef4444',
+                            borderRadius: '0.5rem',
+                            background: 'white',
+                            color: '#ef4444',
+                            fontSize: '0.875rem',
+                            fontWeight: '500',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          참여 취소
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleJoinRound(round.id)}
+                          disabled={round.current_participants >= round.max_participants}
+                          style={{
+                            padding: '0.5rem 1rem',
+                            border: 'none',
+                            borderRadius: '0.5rem',
+                            background: round.current_participants >= round.max_participants ? '#9ca3af' : '#10b981',
+                            color: 'white',
+                            fontSize: '0.875rem',
+                            fontWeight: '500',
+                            cursor: round.current_participants >= round.max_participants ? 'not-allowed' : 'pointer'
+                          }}
+                        >
+                          {round.current_participants >= round.max_participants ? '정원 마감' : '참여하기'}
+                        </button>
+                      )}
+                    </div>
                   )}
                 </div>
               </div>
-          ))}
-        </div>
-
-        {/* 라운딩 모집 폼 모달 */}
-        {isFormOpen && (
-          <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.7)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000,
-            padding: '2rem'
-          }}>
-            <div style={{
-              background: 'white',
-              borderRadius: '1rem',
-              padding: '2rem',
-              maxWidth: '500px',
-              width: '100%'
-            }}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '2rem'
-              }}>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: '700' }}>라운딩 모집하기</h2>
-                <button
-                  onClick={() => setIsFormOpen(false)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    fontSize: '1.5rem',
-                    cursor: 'pointer',
-                    color: '#6b7280'
-                  }}
-                >
-                  ✕
-                </button>
-              </div>
-              <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <input
-                  type="text"
-                  placeholder="라운딩 제목"
-                  style={{
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '0.5rem',
-                    fontSize: '1rem'
-                  }}
-                />
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                  <input
-                    type="text"
-                    placeholder="골프장명"
-                    style={{
-                      flex: 1,
-                      padding: '1rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.5rem',
-                      fontSize: '1rem'
-                    }}
-                  />
-                  <input
-                    type="text"
-                    placeholder="지역"
-                    style={{
-                      flex: 1,
-                      padding: '1rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.5rem',
-                      fontSize: '1rem'
-                    }}
-                  />
-                </div>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                  <input
-                    type="date"
-                    style={{
-                      flex: 1,
-                      padding: '1rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.5rem',
-                      fontSize: '1rem'
-                    }}
-                  />
-                  <input
-                    type="time"
-                    style={{
-                      flex: 1,
-                      padding: '1rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.5rem',
-                      fontSize: '1rem'
-                    }}
-                  />
-                </div>
-                <textarea
-                  placeholder="라운딩 설명"
-                  rows={3}
-                  style={{
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '0.5rem',
-                    fontSize: '1rem',
-                    resize: 'vertical'
-                  }}
-                />
-                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                  <button
-                    type="button"
-                    onClick={() => setIsFormOpen(false)}
-                    style={{
-                      flex: 1,
-                      padding: '1rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.5rem',
-                      background: 'white',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    취소
-                  </button>
-                  <button
-                    type="submit"
-                    style={{
-                      flex: 1,
-                      padding: '1rem',
-                      border: 'none',
-                      borderRadius: '0.5rem',
-                      background: 'linear-gradient(135deg, #0ea5e9, #06b6d4)',
-                      color: 'white',
-                      cursor: 'pointer',
-                      fontWeight: '600'
-                    }}
-                  >
-                    모집하기
-                  </button>
-                </div>
-              </form>
-            </div>
-            </div>
+            ))
           )}
+        </div>
       </div>
+
+      {/* 라운딩 작성 폼 */}
+      <RoundForm
+        isOpen={isRoundFormOpen}
+        onClose={() => setIsRoundFormOpen(false)}
+        onSubmit={createRound}
+      />
     </div>
   );
 };

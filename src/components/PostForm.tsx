@@ -1,177 +1,234 @@
 import React, { useState } from 'react';
-import { usePosts } from '../hooks/usePosts';
-import { useUser } from '@clerk/clerk-react';
 
 interface PostFormProps {
-  isOpen: boolean;
+  onSubmit: (postData: {
+    title: string;
+    content: string;
+    golf_course: string;
+    region: string;
+  }) => Promise<{ success: boolean; error?: string }>;
   onClose: () => void;
+  isOpen: boolean;
 }
 
-const PostForm: React.FC<PostFormProps> = ({ isOpen, onClose }) => {
-  const { createPost } = usePosts();
-  const { user } = useUser();
-  const [loading, setLoading] = useState(false);
-  
+const PostForm: React.FC<PostFormProps> = ({ onSubmit, onClose, isOpen }) => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     golf_course: '',
-    region: '',
-    category: 'general'
+    region: '경기',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const regions = ['경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주', '인천', '서울'];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
-
-    setLoading(true);
-    try {
-      const result = await createPost({
-        ...formData,
-        author_id: user.id,
-        author_name: user.firstName || user.username || '익명'
-      });
-
-      if (result.success) {
-        setFormData({
-          title: '',
-          content: '',
-          golf_course: '',
-          region: '',
-          category: 'general'
-        });
-        onClose();
-        alert('게시글이 등록되었습니다!');
-      } else {
-        alert(result.error || '게시글 등록에 실패했습니다.');
-      }
-    } catch (error) {
-      alert('게시글 등록 중 오류가 발생했습니다.');
-    } finally {
-      setLoading(false);
+    
+    if (!formData.title.trim() || !formData.content.trim() || !formData.golf_course.trim()) {
+      alert('모든 필드를 입력해주세요.');
+      return;
     }
+
+    setIsSubmitting(true);
+    const result = await onSubmit(formData);
+    
+    if (result.success) {
+      setFormData({ title: '', content: '', golf_course: '', region: '경기' });
+      onClose();
+      alert('게시글이 성공적으로 등록되었습니다!');
+    } else {
+      alert(result.error || '게시글 등록에 실패했습니다.');
+    }
+    
+    setIsSubmitting(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">게시글 작성</h2>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-2xl"
-            >
-              ×
-            </button>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000,
+      padding: '1rem'
+    }}>
+      <div style={{
+        background: 'white',
+        borderRadius: '1rem',
+        padding: '2rem',
+        width: '100%',
+        maxWidth: '600px',
+        maxHeight: '90vh',
+        overflow: 'auto'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937', margin: 0 }}>
+            골프장 후기 작성
+          </h2>
+          <button
+            onClick={onClose}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '1.5rem',
+              cursor: 'pointer',
+              color: '#6b7280'
+            }}
+          >
+            ×
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+              제목 *
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="골프장 후기 제목을 입력하세요"
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '1px solid #d1d5db',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+              onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
+              onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                카테고리
-              </label>
-              <select
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              >
-                <option value="general">일반</option>
-                <option value="review">후기</option>
-                <option value="tip">팁</option>
-                <option value="question">질문</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                제목 *
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                골프장명 *
               </label>
               <input
                 type="text"
-                name="title"
-                value={formData.title}
+                name="golf_course"
+                value={formData.golf_course}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                placeholder="제목을 입력하세요"
-                required
+                placeholder="예: 스카이힐CC"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.5rem',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  boxSizing: 'border-box'
+                }}
+                onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
+                onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
               />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  지역
-                </label>
-                <input
-                  type="text"
-                  name="region"
-                  value={formData.region}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="예: 서울, 경기, 강원"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  골프장
-                </label>
-                <input
-                  type="text"
-                  name="golf_course"
-                  value={formData.golf_course}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="골프장명"
-                />
-              </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                내용 *
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                지역 *
               </label>
-              <textarea
-                name="content"
-                value={formData.content}
+              <select
+                name="region"
+                value={formData.region}
                 onChange={handleChange}
-                rows={8}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
-                placeholder="내용을 입력하세요"
-                required
-              />
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.5rem',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  backgroundColor: 'white'
+                }}
+                onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
+                onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
+              >
+                {regions.map(region => (
+                  <option key={region} value={region}>{region}</option>
+                ))}
+              </select>
             </div>
+          </div>
 
-            <div className="flex justify-end space-x-3 pt-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
-                disabled={loading}
-              >
-                취소
-              </button>
-              <button
-                type="submit"
-                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
-                disabled={loading}
-              >
-                {loading ? '등록 중...' : '등록하기'}
-              </button>
-            </div>
-          </form>
-        </div>
+          <div style={{ marginBottom: '2rem' }}>
+            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+              후기 내용 *
+            </label>
+            <textarea
+              name="content"
+              value={formData.content}
+              onChange={handleChange}
+              placeholder="골프장 컨디션, 그린 상태, 추천 팁 등을 자세히 작성해주세요&#10;&#10;예시:&#10;그린: ★★★★★ (5/5) - 완벽한 스피드&#10;페어웨이: ★★★★☆ (4/5) - 상태 양호&#10;날씨: 맑음, 미풍&#10;&#10;TIP: 14번 홀에서 주의사항..."
+              rows={8}
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '1px solid #d1d5db',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                outline: 'none',
+                resize: 'vertical',
+                fontFamily: 'inherit',
+                boxSizing: 'border-box'
+              }}
+              onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
+              onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
+            />
+          </div>
+
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+            <button
+              type="button"
+              onClick={onClose}
+              style={{
+                padding: '0.75rem 1.5rem',
+                border: '1px solid #d1d5db',
+                borderRadius: '0.5rem',
+                background: 'white',
+                color: '#374151',
+                fontWeight: '500',
+                cursor: 'pointer'
+              }}
+            >
+              취소
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              style={{
+                padding: '0.75rem 1.5rem',
+                border: 'none',
+                borderRadius: '0.5rem',
+                background: isSubmitting ? '#9ca3af' : '#10b981',
+                color: 'white',
+                fontWeight: '500',
+                cursor: isSubmitting ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {isSubmitting ? '등록 중...' : '등록하기'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

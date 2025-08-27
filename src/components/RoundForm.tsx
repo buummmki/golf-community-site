@@ -1,230 +1,374 @@
 import React, { useState } from 'react';
-import { useRounds } from '../hooks/useRounds';
-import { useUser } from '@clerk/clerk-react';
 
 interface RoundFormProps {
-  isOpen: boolean;
+  onSubmit: (roundData: {
+    title: string;
+    description: string;
+    golf_course: string;
+    date: string;
+    time: string;
+    max_participants: number;
+    green_fee?: string;
+    region: string;
+  }) => Promise<{ success: boolean; error?: string }>;
   onClose: () => void;
+  isOpen: boolean;
 }
 
-const RoundForm: React.FC<RoundFormProps> = ({ isOpen, onClose }) => {
-  const { createRound } = useRounds();
-  const { user } = useUser();
-  const [loading, setLoading] = useState(false);
-  
+const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     golf_course: '',
-    region: '',
     date: '',
     time: '',
     max_participants: 4,
-    green_fee: 0
+    green_fee: '',
+    region: '경기',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const regions = ['경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주', '인천', '서울'];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
-
-    setLoading(true);
-    try {
-      const result = await createRound({
-        ...formData,
-        author_id: user.id,
-        author_name: user.firstName || user.username || '익명',
-        status: 'recruiting'
-      });
-
-      if (result.success) {
-        setFormData({
-          title: '',
-          description: '',
-          golf_course: '',
-          region: '',
-          date: '',
-          time: '',
-          max_participants: 4,
-          green_fee: 0
-        });
-        onClose();
-        alert('라운딩 모집이 등록되었습니다!');
-      } else {
-        alert(result.error || '라운딩 모집 등록에 실패했습니다.');
-      }
-    } catch (error) {
-      alert('라운딩 모집 등록 중 오류가 발생했습니다.');
-    } finally {
-      setLoading(false);
+    
+    if (!formData.title.trim() || !formData.golf_course.trim() || !formData.date || !formData.time) {
+      alert('필수 항목을 모두 입력해주세요.');
+      return;
     }
+
+    // 날짜 유효성 검사 (과거 날짜 불허)
+    const selectedDate = new Date(formData.date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    if (selectedDate < today) {
+      alert('과거 날짜는 선택할 수 없습니다.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    const result = await onSubmit({
+      ...formData,
+      green_fee: formData.green_fee || undefined,
+    });
+    
+    if (result.success) {
+      setFormData({
+        title: '',
+        description: '',
+        golf_course: '',
+        date: '',
+        time: '',
+        max_participants: 4,
+        green_fee: '',
+        region: '경기',
+      });
+      onClose();
+      alert('라운딩 모집이 성공적으로 등록되었습니다!');
+    } else {
+      alert(result.error || '라운딩 모집 등록에 실패했습니다.');
+    }
+    
+    setIsSubmitting(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const value = e.target.type === 'number' ? Number(e.target.value) : e.target.value;
-    setFormData({
-      ...formData,
-      [e.target.name]: value
-    });
+    const { name, value } = e.target;
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: name === 'max_participants' ? parseInt(value) || 4 : value 
+    }));
+  };
+
+  // 오늘 날짜를 YYYY-MM-DD 형식으로 반환
+  const getTodayDate = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">라운딩 모집</h2>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-2xl"
-            >
-              ×
-            </button>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000,
+      padding: '1rem'
+    }}>
+      <div style={{
+        background: 'white',
+        borderRadius: '1rem',
+        padding: '2rem',
+        width: '100%',
+        maxWidth: '600px',
+        maxHeight: '90vh',
+        overflow: 'auto'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937', margin: 0 }}>
+            라운딩 모집 작성
+          </h2>
+          <button
+            onClick={onClose}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '1.5rem',
+              cursor: 'pointer',
+              color: '#6b7280'
+            }}
+          >
+            ×
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+              제목 *
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="예: 주말 조조 라운딩 모집"
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '1px solid #d1d5db',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+              onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
+              onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                제목 *
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                골프장명 *
               </label>
               <input
                 type="text"
-                name="title"
-                value={formData.title}
+                name="golf_course"
+                value={formData.golf_course}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                placeholder="라운딩 모집 제목을 입력하세요"
-                required
+                placeholder="예: 스카이힐CC"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.5rem',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  boxSizing: 'border-box'
+                }}
+                onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
+                onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
               />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  지역 *
-                </label>
-                <input
-                  type="text"
-                  name="region"
-                  value={formData.region}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="예: 서울, 경기, 강원"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  골프장 *
-                </label>
-                <input
-                  type="text"
-                  name="golf_course"
-                  value={formData.golf_course}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="골프장명"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  날짜 *
-                </label>
-                <input
-                  type="date"
-                  name="date"
-                  value={formData.date}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  시간 *
-                </label>
-                <input
-                  type="time"
-                  name="time"
-                  value={formData.time}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  모집 인원 *
-                </label>
-                <select
-                  name="max_participants"
-                  value={formData.max_participants}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  required
-                >
-                  <option value={2}>2명</option>
-                  <option value={3}>3명</option>
-                  <option value={4}>4명</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  그린피 (원)
-                </label>
-                <input
-                  type="number"
-                  name="green_fee"
-                  value={formData.green_fee}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="0"
-                  min="0"
-                />
-              </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                상세 설명
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                지역 *
               </label>
-              <textarea
-                name="description"
-                value={formData.description}
+              <select
+                name="region"
+                value={formData.region}
                 onChange={handleChange}
-                rows={4}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
-                placeholder="라운딩에 대한 상세 정보를 입력하세요"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.5rem',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  backgroundColor: 'white'
+                }}
+                onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
+                onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
+              >
+                {regions.map(region => (
+                  <option key={region} value={region}>{region}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                날짜 *
+              </label>
+              <input
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                min={getTodayDate()}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.5rem',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  boxSizing: 'border-box'
+                }}
+                onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
+                onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
               />
             </div>
 
-            <div className="flex justify-end space-x-3 pt-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
-                disabled={loading}
-              >
-                취소
-              </button>
-              <button
-                type="submit"
-                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
-                disabled={loading}
-              >
-                {loading ? '등록 중...' : '모집하기'}
-              </button>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                시간 *
+              </label>
+              <input
+                type="time"
+                name="time"
+                value={formData.time}
+                onChange={handleChange}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.5rem',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  boxSizing: 'border-box'
+                }}
+                onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
+                onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
+              />
             </div>
-          </form>
-        </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                모집인원 *
+              </label>
+              <select
+                name="max_participants"
+                value={formData.max_participants}
+                onChange={handleChange}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.5rem',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  backgroundColor: 'white'
+                }}
+                onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
+                onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
+              >
+                <option value={2}>2명</option>
+                <option value={3}>3명</option>
+                <option value={4}>4명</option>
+                <option value={8}>8명</option>
+              </select>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+              그린피 (선택)
+            </label>
+            <input
+              type="text"
+              name="green_fee"
+              value={formData.green_fee}
+              onChange={handleChange}
+              placeholder="예: 12만원"
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '1px solid #d1d5db',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+              onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
+              onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
+            />
+          </div>
+
+          <div style={{ marginBottom: '2rem' }}>
+            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+              상세 설명 (선택)
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="라운딩에 대한 상세 정보를 입력하세요&#10;&#10;예시:&#10;- 조조 티타임으로 시원한 아침 라운딩&#10;- 초급~중급자 수준 환영&#10;- 매너 있는 분만 신청 부탁드립니다&#10;- 카트비 별도"
+              rows={5}
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '1px solid #d1d5db',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                outline: 'none',
+                resize: 'vertical',
+                fontFamily: 'inherit',
+                boxSizing: 'border-box'
+              }}
+              onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
+              onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
+            />
+          </div>
+
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+            <button
+              type="button"
+              onClick={onClose}
+              style={{
+                padding: '0.75rem 1.5rem',
+                border: '1px solid #d1d5db',
+                borderRadius: '0.5rem',
+                background: 'white',
+                color: '#374151',
+                fontWeight: '500',
+                cursor: 'pointer'
+              }}
+            >
+              취소
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              style={{
+                padding: '0.75rem 1.5rem',
+                border: 'none',
+                borderRadius: '0.5rem',
+                background: isSubmitting ? '#9ca3af' : '#10b981',
+                color: 'white',
+                fontWeight: '500',
+                cursor: isSubmitting ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {isSubmitting ? '등록 중...' : '등록하기'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
