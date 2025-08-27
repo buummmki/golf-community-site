@@ -234,8 +234,8 @@ const Rounds = () => {
                   fontWeight: '500'
                 }}>
                   {round.status}
-                </span>
-              </div>
+                  </span>
+                </div>
 
               <div style={{
                 display: 'grid',
@@ -261,16 +261,16 @@ const Rounds = () => {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span>📅</span>
                   <span>{new Date(round.date).toLocaleDateString('ko-KR')} {round.time}</span>
-                </div>
+                  </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span>💰</span>
                   <span style={{ fontWeight: '600', color: '#059669' }}>{round.green_fee}</span>
-                </div>
+                  </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span>👥</span>
                   <span>{round.participants}/{round.max_participants}명</span>
+                  </div>
                 </div>
-              </div>
 
               <p style={{
                 color: '#6b7280',
@@ -305,11 +305,11 @@ const Rounds = () => {
                     fontWeight: '600',
                     cursor: 'pointer'
                   }}>
-                    참여하기
-                  </button>
-                )}
+                      참여하기
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
           ))}
         </div>
 
@@ -456,8 +456,8 @@ const Rounds = () => {
                 </div>
               </form>
             </div>
-          </div>
-        )}
+            </div>
+          )}
       </div>
     </div>
   );

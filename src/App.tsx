@@ -271,7 +271,7 @@ function App() {
           <Route path="/golf-courses" element={<ProtectedRoute><GolfCourses /></ProtectedRoute>} />
           <Route path="/market" element={<ProtectedRoute><Market /></ProtectedRoute>} />
         </Routes>
-      </div>
+    </div>
     </Router>
   );
 }

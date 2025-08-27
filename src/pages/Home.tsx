@@ -9,467 +9,424 @@ const Home = () => {
     <div style={{
       minHeight: '100vh',
       background: '#f8fafc',
-      paddingBottom: '5rem' // Bottom navigation 공간
+      paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))',
+      WebkitOverflowScrolling: 'touch'
     }}>
       {/* Mobile Header */}
       <div style={{
-        background: 'linear-gradient(135deg, #065f46, #047857)',
-        color: 'white',
+        background: 'white',
+        color: '#1f2937',
         padding: '1rem',
+        paddingTop: 'calc(1rem + env(safe-area-inset-top))',
         position: 'sticky',
         top: 0,
         zIndex: 10,
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+        borderBottom: '1px solid #e5e7eb'
       }}>
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
+          maxWidth: '100%'
         }}>
-          <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{
+              width: '2rem',
+              height: '2rem',
+              background: 'linear-gradient(135deg, #10b981, #059669)',
+              borderRadius: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
             <h1 style={{
-              fontSize: '1.5rem',
+              fontSize: '1.25rem',
               fontWeight: '700',
-              margin: 0
-            }}>GOLF LOOP</h1>
-            <p style={{
-              fontSize: '0.875rem',
               margin: 0,
-              opacity: 0.8
-            }}>프리미엄 골프 커뮤니티</p>
+              color: '#1f2937'
+            }}>GOLF LOOP</h1>
           </div>
-          {!isSignedIn && (
-            <SignInButton>
-              <button style={{
-                background: 'rgba(255,255,255,0.2)',
-                border: '1px solid rgba(255,255,255,0.3)',
-                color: 'white',
-                padding: '0.5rem 1rem',
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{
+              width: '2rem',
+              height: '2rem',
+              background: '#f3f4f6',
+              borderRadius: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
+            }}>
+              <svg width="16" height="16" fill="#6b7280" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
+            <div style={{
+              width: '2rem',
+              height: '2rem',
+              background: '#f3f4f6',
                 borderRadius: '0.5rem',
-                fontSize: '0.875rem',
-                cursor: 'pointer'
-              }}>
-                로그인
-              </button>
-            </SignInButton>
-          )}
-        </div>
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
+            }}>
+              <svg width="16" height="16" fill="#6b7280" viewBox="0 0 24 24">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+              </svg>
+              <div style={{
+                position: 'absolute',
+                top: '-2px',
+                right: '-2px',
+                width: '8px',
+                height: '8px',
+                background: '#ef4444',
+                borderRadius: '50%'
+              }}></div>
+            </div>
+          </div>
+            </div>
       </div>
 
       {/* Main Content */}
       <div style={{ padding: '1rem' }}>
-        {/* 빠른 액세스 카드 */}
+        {/* 할일 섹션 */}
+        <div style={{ marginBottom: '1.5rem' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '0.75rem'
+          }}>
+            <span style={{
+              fontSize: '0.875rem',
+              color: '#6b7280',
+              fontWeight: '500'
+            }}>할일 &gt;</span>
+          </div>
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '1rem',
-          marginBottom: '2rem'
-        }}>
-          <Link to="/posts" style={{ textDecoration: 'none' }}>
+            background: 'white',
+            borderRadius: '1rem',
+            padding: '1.25rem',
+            border: '1px solid #e5e7eb',
+            position: 'relative'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              marginBottom: '1rem'
+            }}>
+              <div style={{
+                width: '2.5rem',
+                height: '2.5rem',
+                background: '#3b82f6',
+                borderRadius: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              <div style={{ flex: 1 }}>
+                <h3 style={{
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#1f2937',
+                  margin: '0 0 0.25rem 0',
+                  lineHeight: '1.3'
+                }}>골프 커뮤니티에 참여하세요</h3>
+                <p style={{
+                  fontSize: '0.875rem',
+                  color: '#6b7280',
+                  margin: 0,
+                  lineHeight: '1.4'
+                }}>골프 후기와 정보를 공유하고 파트너를 찾아보세요</p>
+              </div>
+            </div>
+            <button style={{
+              background: '#3b82f6',
+              color: 'white',
+              border: 'none',
+              borderRadius: '0.5rem',
+              padding: '0.75rem 1.5rem',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              width: '100%'
+            }}>지금 시작하기</button>
+            <button style={{
+              position: 'absolute',
+              top: '1rem',
+              right: '1rem',
+              background: 'none',
+              border: 'none',
+              fontSize: '1.25rem',
+              color: '#9ca3af',
+              cursor: 'pointer',
+              padding: '0.25rem'
+            }}>×</button>
+          </div>
+        </div>
+
+        {/* 골프 커뮤니티 섹션 */}
+        <div style={{ marginBottom: '1.5rem' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '0.75rem'
+          }}>
+            <span style={{
+              fontSize: '0.875rem',
+              color: '#6b7280',
+              fontWeight: '500'
+            }}>골프 커뮤니티 &gt;</span>
+          </div>
+          
+          {/* 자주 쓰는 서비스 */}
             <div style={{
               background: 'white',
               borderRadius: '1rem',
-              padding: '1.5rem',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-              border: '1px solid #e2e8f0',
-              textAlign: 'center',
-              transition: 'all 0.2s',
-              minHeight: '120px',
+            padding: '1.25rem',
+            border: '1px solid #e5e7eb',
+            marginBottom: '0.75rem'
+          }}>
+            <div style={{
               display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.02)';
-              e.currentTarget.style.boxShadow = '0 4px 20px rgba(16, 185, 129, 0.15)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+              alignItems: 'center',
+              gap: '0.75rem'
+            }}>
+              <div style={{
+                width: '2.5rem',
+                height: '2.5rem',
+                background: '#10b981',
+                borderRadius: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                </svg>
+              </div>
+              <span style={{
+                fontSize: '1rem',
+                fontWeight: '500',
+                color: '#1f2937'
+              }}>모든 게시글 보기</span>
+            </div>
+          </div>
+
+          {/* 연결하고 내역보기 */}
+            <div style={{
+              background: 'white',
+              borderRadius: '1rem',
+            padding: '1.25rem',
+            border: '1px solid #e5e7eb',
+            marginBottom: '0.75rem'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem'
+            }}>
+              <div style={{
+                width: '2.5rem',
+                height: '2.5rem',
+                background: '#8b5cf6',
+                borderRadius: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"/>
+                </svg>
+              </div>
+              <div style={{ flex: 1 }}>
+                <span style={{
+                  fontSize: '1rem',
+                  fontWeight: '500',
+                  color: '#1f2937'
+                }}>연결하고 내역보기</span>
+                <p style={{
+                  fontSize: '0.875rem',
+                  color: '#6b7280',
+                  margin: '0.25rem 0 0 0'
+                }}>내 모든 골프 활동</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 내 골프 정보 섹션 */}
+        <div style={{ marginBottom: '1.5rem' }}>
+          <div style={{
+            background: 'white',
+            borderRadius: '1rem',
+            padding: '1.25rem',
+            border: '1px solid #e5e7eb'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              marginBottom: '1rem'
+            }}>
+              <div style={{
+                width: '2.5rem',
+                height: '2.5rem',
+                background: '#f59e0b',
+                borderRadius: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.41L19 8l-9 9z"/>
+              </svg>
+              </div>
+              <span style={{
+                fontSize: '1rem',
+                fontWeight: '500',
+                color: '#1f2937'
+              }}>내 골프 정보</span>
+            </div>
+            
+            {/* 세그먼트 버튼들 */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '0.5rem'
+            }}>
+              <button style={{
+                background: '#f3f4f6',
+                border: 'none',
+                borderRadius: '0.5rem',
+                padding: '0.75rem 0.5rem',
+                fontSize: '0.75rem',
+                fontWeight: '500',
+                color: '#374151',
+                cursor: 'pointer'
+              }}>라운딩</button>
+              <button style={{
+                background: '#f3f4f6',
+                border: 'none',
+                borderRadius: '0.5rem',
+                padding: '0.75rem 0.5rem',
+                fontSize: '0.75rem',
+                fontWeight: '500',
+                color: '#374151',
+                cursor: 'pointer'
+              }}>골프장</button>
+              <button style={{
+                background: '#f3f4f6',
+                border: 'none',
+                borderRadius: '0.5rem',
+                padding: '0.75rem 0.5rem',
+                fontSize: '0.75rem',
+                fontWeight: '500',
+                color: '#374151',
+                cursor: 'pointer'
+              }}>장터</button>
+            </div>
+          </div>
+        </div>
+
+        {/* 추천 서비스 섹션 */}
+        <div style={{ marginBottom: '1.5rem' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '0.75rem'
+          }}>
+            <span style={{
+              fontSize: '0.875rem',
+              color: '#6b7280',
+              fontWeight: '500'
+            }}>골프 LOOP를 위해 준비했어요</span>
+          </div>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '0.75rem'
+          }}>
+            <div style={{
+              background: 'white',
+              borderRadius: '1rem',
+              padding: '1rem',
+              border: '1px solid #e5e7eb',
+              textAlign: 'center'
             }}>
               <div style={{
                 width: '3rem',
                 height: '3rem',
                 background: 'linear-gradient(135deg, #10b981, #059669)',
                 borderRadius: '0.75rem',
+                margin: '0 auto 0.75rem auto',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 0.75rem auto'
+                justifyContent: 'center'
               }}>
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
-                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                 </svg>
               </div>
               <h3 style={{
-                fontSize: '1rem',
+                fontSize: '0.875rem',
                 fontWeight: '600',
                 color: '#1f2937',
                 margin: '0 0 0.25rem 0'
-              }}>게시판</h3>
+              }}>골프 파트너 찾기</h3>
               <p style={{
                 fontSize: '0.75rem',
                 color: '#6b7280',
                 margin: 0
-              }}>골프 후기 & 정보</p>
+              }}>함께 라운딩할 파트너를 찾아보세요</p>
             </div>
-          </Link>
 
-          <Link to="/rounds" style={{ textDecoration: 'none' }}>
             <div style={{
               background: 'white',
               borderRadius: '1rem',
-              padding: '1.5rem',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-              border: '1px solid #e2e8f0',
-              textAlign: 'center',
-              transition: 'all 0.2s',
-              minHeight: '120px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.02)';
-              e.currentTarget.style.boxShadow = '0 4px 20px rgba(34, 197, 94, 0.15)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+              padding: '1rem',
+              border: '1px solid #e5e7eb',
+              textAlign: 'center'
             }}>
               <div style={{
                 width: '3rem',
                 height: '3rem',
-                background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
                 borderRadius: '0.75rem',
+                margin: '0 auto 0.75rem auto',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 0.75rem auto'
+                justifyContent: 'center'
               }}>
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
-                  <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.006 3.006 0 0 0 16.76 6l-2.34.78A6.006 6.006 0 0 1 9 12v10h2v-5h2v5h7z"/>
-                </svg>
-              </div>
-              <h3 style={{
-                fontSize: '1rem',
-                fontWeight: '600',
-                color: '#1f2937',
-                margin: '0 0 0.25rem 0'
-              }}>라운딩</h3>
-              <p style={{
-                fontSize: '0.75rem',
-                color: '#6b7280',
-                margin: 0
-              }}>파트너 매칭</p>
-            </div>
-          </Link>
-
-          <Link to="/golf-courses" style={{ textDecoration: 'none' }}>
-            <div style={{
-              background: 'white',
-              borderRadius: '1rem',
-              padding: '1.5rem',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-              border: '1px solid #e2e8f0',
-              textAlign: 'center',
-              transition: 'all 0.2s',
-              minHeight: '120px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.02)';
-              e.currentTarget.style.boxShadow = '0 4px 20px rgba(6, 182, 212, 0.15)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
-            }}>
-              <div style={{
-                width: '3rem',
-                height: '3rem',
-                background: 'linear-gradient(135deg, #06b6d4, #0891b2)',
-                borderRadius: '0.75rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 0.75rem auto'
-              }}>
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                 </svg>
               </div>
               <h3 style={{
-                fontSize: '1rem',
+                fontSize: '0.875rem',
                 fontWeight: '600',
                 color: '#1f2937',
                 margin: '0 0 0.25rem 0'
-              }}>골프장</h3>
+              }}>골프장 정보</h3>
               <p style={{
                 fontSize: '0.75rem',
                 color: '#6b7280',
                 margin: 0
-              }}>정보 & 예약</p>
+              }}>전국 골프장 정보와 리뷰</p>
             </div>
-          </Link>
-
-          <Link to="/market" style={{ textDecoration: 'none' }}>
-            <div style={{
-              background: 'white',
-              borderRadius: '1rem',
-              padding: '1.5rem',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-              border: '1px solid #e2e8f0',
-              textAlign: 'center',
-              transition: 'all 0.2s',
-              minHeight: '120px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.02)';
-              e.currentTarget.style.boxShadow = '0 4px 20px rgba(168, 85, 247, 0.15)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
-            }}>
-              <div style={{
-                width: '3rem',
-                height: '3rem',
-                background: 'linear-gradient(135deg, #a855f7, #9333ea)',
-                borderRadius: '0.75rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 0.75rem auto'
-              }}>
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
-                  <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                </svg>
-              </div>
-              <h3 style={{
-                fontSize: '1rem',
-                fontWeight: '600',
-                color: '#1f2937',
-                margin: '0 0 0.25rem 0'
-              }}>장터</h3>
-              <p style={{
-                fontSize: '0.75rem',
-                color: '#6b7280',
-                margin: 0
-              }}>중고 거래</p>
-            </div>
-          </Link>
-        </div>
-
-        {/* 활동 통계 카드 */}
-        <div style={{
-          background: 'white',
-          borderRadius: '1rem',
-          padding: '1.5rem',
-          marginBottom: '2rem',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-          border: '1px solid #e2e8f0'
-        }}>
-          <h2 style={{
-            fontSize: '1.125rem',
-            fontWeight: '600',
-            color: '#1f2937',
-            marginBottom: '1rem'
-          }}>커뮤니티 현황</h2>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '1rem'
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{
-                fontSize: '1.5rem',
-                fontWeight: '700',
-                color: '#10b981',
-                marginBottom: '0.25rem'
-              }}>1,234</div>
-              <div style={{
-                fontSize: '0.75rem',
-                color: '#6b7280'
-              }}>활성 멤버</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{
-                fontSize: '1.5rem',
-                fontWeight: '700',
-                color: '#3b82f6',
-                marginBottom: '0.25rem'
-              }}>856</div>
-              <div style={{
-                fontSize: '0.75rem',
-                color: '#6b7280'
-              }}>오늘 게시글</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{
-                fontSize: '1.5rem',
-                fontWeight: '700',
-                color: '#f59e0b',
-                marginBottom: '0.25rem'
-              }}>342</div>
-              <div style={{
-                fontSize: '0.75rem',
-                color: '#6b7280'
-              }}>라운딩 매칭</div>
-            </div>
-          </div>
-        </div>
-
-        {/* 최근 활동 */}
-        <div style={{
-          background: 'white',
-          borderRadius: '1rem',
-          padding: '1.5rem',
-          marginBottom: '2rem',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-          border: '1px solid #e2e8f0'
-        }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1rem'
-          }}>
-            <h2 style={{
-              fontSize: '1.125rem',
-              fontWeight: '600',
-              color: '#1f2937',
-              margin: 0
-            }}>최근 활동</h2>
-            <Link to="/posts" style={{
-              fontSize: '0.875rem',
-              color: '#10b981',
-              textDecoration: 'none'
-            }}>더보기</Link>
-          </div>
-          <div style={{ space: '1rem' }}>
-            {[
-              { title: '남서울CC 컨디션 후기', author: '골프마니아', time: '5분 전', category: '후기' },
-              { title: '이번 주말 스카이72 라운딩', author: '버디킹', time: '12분 전', category: '모집' },
-              { title: '드라이버 추천 부탁드려요', author: '골프초보', time: '25분 전', category: '질문' }
-            ].map((item, index) => (
-              <div key={index} style={{
-                padding: '0.75rem 0',
-                borderBottom: index < 2 ? '1px solid #f1f5f9' : 'none'
-              }}>
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  marginBottom: '0.25rem'
-                }}>
-                  <h3 style={{
-                    fontSize: '0.875rem',
-                    fontWeight: '500',
-                    color: '#1f2937',
-                    margin: 0,
-                    lineHeight: '1.4'
-                  }}>{item.title}</h3>
-                  <span style={{
-                    fontSize: '0.75rem',
-                    color: '#6b7280',
-                    whiteSpace: 'nowrap',
-                    marginLeft: '0.5rem'
-                  }}>{item.time}</span>
-                </div>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
-                }}>
-                  <span style={{
-                    fontSize: '0.75rem',
-                    color: '#6b7280'
-                  }}>{item.author}</span>
-                  <span style={{
-                    fontSize: '0.6rem',
-                    background: index === 0 ? '#dcfce7' : index === 1 ? '#dbeafe' : '#fef3c7',
-                    color: index === 0 ? '#166534' : index === 1 ? '#1e40af' : '#92400e',
-                    padding: '0.125rem 0.5rem',
-                    borderRadius: '0.25rem'
-                  }}>{item.category}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* 추천 골프장 */}
-        <div style={{
-          background: 'white',
-          borderRadius: '1rem',
-          padding: '1.5rem',
-          marginBottom: '2rem',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-          border: '1px solid #e2e8f0'
-        }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1rem'
-          }}>
-            <h2 style={{
-              fontSize: '1.125rem',
-              fontWeight: '600',
-              color: '#1f2937',
-              margin: 0
-            }}>추천 골프장</h2>
-            <Link to="/golf-courses" style={{
-              fontSize: '0.875rem',
-              color: '#10b981',
-              textDecoration: 'none'
-            }}>더보기</Link>
-          </div>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '1rem'
-          }}>
-            {[
-              { name: '스카이힐CC', location: '경기', rating: '4.8' },
-              { name: '오크밸리CC', location: '강원', rating: '4.9' }
-            ].map((course, index) => (
-              <div key={index} style={{
-                border: '1px solid #f1f5f9',
-                borderRadius: '0.5rem',
-                padding: '1rem',
-                textAlign: 'center'
-              }}>
-                <h3 style={{
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  color: '#1f2937',
-                  margin: '0 0 0.25rem 0'
-                }}>{course.name}</h3>
-                <p style={{
-                  fontSize: '0.75rem',
-                  color: '#6b7280',
-                  margin: '0 0 0.5rem 0'
-                }}>{course.location}</p>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.25rem'
-                }}>
-                  <span style={{ color: '#fbbf24', fontSize: '0.875rem' }}>★</span>
-                  <span style={{ fontSize: '0.75rem', color: '#1f2937', fontWeight: '500' }}>
-                    {course.rating}
-                  </span>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </div>
@@ -481,10 +438,9 @@ const Home = () => {
         left: 0,
         right: 0,
         background: 'white',
-        borderTop: '1px solid #e2e8f0',
+        borderTop: '1px solid #e5e7eb',
         padding: '0.5rem 0 calc(0.5rem + env(safe-area-inset-bottom))',
-        zIndex: 50,
-        boxShadow: '0 -2px 10px rgba(0,0,0,0.08)'
+        zIndex: 50
       }}>
         <div style={{
           display: 'grid',
@@ -501,22 +457,20 @@ const Home = () => {
             alignItems: 'center',
             padding: '0.5rem 0.25rem',
             borderRadius: '0.5rem',
-            transition: 'all 0.2s'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#f8fafc';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'transparent';
+            background: '#f3f4f6',
+            minHeight: '44px',
+            justifyContent: 'center',
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation'
           }}>
-            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#10b981' }}>
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#1f2937' }}>
               <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
             </svg>
             <span style={{
               fontSize: '0.6rem',
-              color: '#10b981',
+              color: '#1f2937',
               marginTop: '0.25rem',
-              fontWeight: '500'
+              fontWeight: '600'
             }}>홈</span>
           </Link>
 
@@ -527,13 +481,10 @@ const Home = () => {
             alignItems: 'center',
             padding: '0.5rem 0.25rem',
             borderRadius: '0.5rem',
-            transition: 'all 0.2s'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#f8fafc';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'transparent';
+            minHeight: '44px',
+            justifyContent: 'center',
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation'
           }}>
             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#6b7280' }}>
               <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
@@ -553,13 +504,10 @@ const Home = () => {
             alignItems: 'center',
             padding: '0.5rem 0.25rem',
             borderRadius: '0.5rem',
-            transition: 'all 0.2s'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#f8fafc';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'transparent';
+            minHeight: '44px',
+            justifyContent: 'center',
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation'
           }}>
             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#6b7280' }}>
               <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.006 3.006 0 0 0 16.76 6l-2.34.78A6.006 6.006 0 0 1 9 12v10h2v-5h2v5h7z"/>
@@ -570,7 +518,7 @@ const Home = () => {
               marginTop: '0.25rem',
               fontWeight: '500'
             }}>라운딩</span>
-          </Link>
+                </Link>
 
           <Link to="/golf-courses" style={{
             textDecoration: 'none',
@@ -579,13 +527,10 @@ const Home = () => {
             alignItems: 'center',
             padding: '0.5rem 0.25rem',
             borderRadius: '0.5rem',
-            transition: 'all 0.2s'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#f8fafc';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'transparent';
+            minHeight: '44px',
+            justifyContent: 'center',
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation'
           }}>
             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#6b7280' }}>
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
@@ -596,7 +541,7 @@ const Home = () => {
               marginTop: '0.25rem',
               fontWeight: '500'
             }}>골프장</span>
-          </Link>
+                </Link>
 
           <Link to="/market" style={{
             textDecoration: 'none',
@@ -605,25 +550,22 @@ const Home = () => {
             alignItems: 'center',
             padding: '0.5rem 0.25rem',
             borderRadius: '0.5rem',
-            transition: 'all 0.2s'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#f8fafc';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'transparent';
+            minHeight: '44px',
+            justifyContent: 'center',
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation'
           }}>
             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#6b7280' }}>
-              <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+              <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
             </svg>
             <span style={{
               fontSize: '0.6rem',
               color: '#6b7280',
               marginTop: '0.25rem',
               fontWeight: '500'
-            }}>장터</span>
-          </Link>
-        </div>
+            }}>전체</span>
+            </Link>
+          </div>
       </div>
     </div>
   );

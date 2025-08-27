@@ -216,7 +216,7 @@ const GolfCourses = () => {
           }}>
             원하는 조건으로 <strong style={{ fontWeight: '600' }}>완벽한 골프장</strong>을 찾아보세요
           </p>
-        </div>
+          </div>
 
         {/* 검색 탭 */}
         <div style={{
@@ -244,7 +244,7 @@ const GolfCourses = () => {
           >
             지역별 찾기
           </button>
-          <button
+          <button 
             onClick={() => setActiveTab('name')}
             style={{
               flex: 1,
@@ -325,12 +325,12 @@ const GolfCourses = () => {
                     fontSize: '0.95rem'
                   }}>
                     {region.count}개 골프장
-                  </div>
-                </div>
+                    </div>
+                    </div>
               ))}
-            </div>
-          </div>
-        )}
+                    </div>
+                      </div>
+                    )}
 
         {/* 골프장명 검색 */}
         {activeTab === 'name' && (
@@ -440,7 +440,7 @@ const GolfCourses = () => {
                 </button>
               ))}
             </div>
-          </div>
+                  </div>
         )}
 
         {/* 검색 결과 */}
@@ -787,8 +787,8 @@ const GolfCourses = () => {
                         e.currentTarget.style.color = '#059669';
                       }}
                       >
-                        상세보기
-                      </button>
+                      상세보기
+                    </button>
                       <button style={{
                         flex: 1,
                         padding: '0.75rem',
@@ -811,13 +811,13 @@ const GolfCourses = () => {
                       >
                         예약하기
                       </button>
-                    </div>
                   </div>
                 </div>
+              </div>
               ))}
             </div>
-          </div>
-        )}
+            </div>
+          )}
       </div>
     </div>
   );
