@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SignInButton, useAuth } from '@clerk/clerk-react';
 
 const Home = () => {
   const { isSignedIn } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: '#f8fafc',
-      paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))',
-      WebkitOverflowScrolling: 'touch'
-    }}>
+    <div 
+      style={{
+        minHeight: '100vh',
+        background: '#f8fafc',
+        paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))',
+        WebkitOverflowScrolling: 'touch'
+      }}
+      onClick={() => setIsMenuOpen(false)}
+    >
             {/* Mobile Header - 네이버 스타일 */}
       <div style={{
         background: 'white',
@@ -29,19 +33,8 @@ const Home = () => {
           alignItems: 'center',
           maxWidth: '100%'
         }}>
-          {/* 왼쪽: 햄버거 메뉴 */}
-          <div style={{
-            width: '2rem',
-            height: '2rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer'
-          }}>
-            <svg width="20" height="20" fill="#1f2937" viewBox="0 0 24 24">
-              <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-            </svg>
-          </div>
+          {/* 왼쪽: 빈 공간 */}
+          <div style={{ width: '2rem' }}></div>
 
           {/* 중앙: GOLF LOOP 로고 */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -66,18 +59,75 @@ const Home = () => {
             }}>GOLF LOOP</h1>
           </div>
 
-          {/* 오른쪽: 햄버거 메뉴 */}
+          {/* 오른쪽: 메뉴 버튼 */}
           <div style={{
             width: '2rem',
             height: '2rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            position: 'relative'
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsMenuOpen(!isMenuOpen);
           }}>
             <svg width="20" height="20" fill="#1f2937" viewBox="0 0 24 24">
               <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
             </svg>
+            
+            {/* 드롭다운 메뉴 */}
+            {isMenuOpen && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                right: 0,
+                background: 'white',
+                borderRadius: '0.5rem',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                border: '1px solid #e5e7eb',
+                minWidth: '150px',
+                zIndex: 50,
+                marginTop: '0.5rem'
+              }}>
+                <Link to="/" style={{
+                  display: 'block',
+                  padding: '0.75rem 1rem',
+                  color: '#1f2937',
+                  textDecoration: 'none',
+                  fontSize: '0.875rem',
+                  borderBottom: '1px solid #f3f4f6'
+                }}
+                onClick={() => setIsMenuOpen(false)}>홈</Link>
+                <Link to="/posts" style={{
+                  display: 'block',
+                  padding: '0.75rem 1rem',
+                  color: '#1f2937',
+                  textDecoration: 'none',
+                  fontSize: '0.875rem',
+                  borderBottom: '1px solid #f3f4f6'
+                }}
+                onClick={() => setIsMenuOpen(false)}>게시판</Link>
+                <Link to="/rounds" style={{
+                  display: 'block',
+                  padding: '0.75rem 1rem',
+                  color: '#1f2937',
+                  textDecoration: 'none',
+                  fontSize: '0.875rem',
+                  borderBottom: '1px solid #f3f4f6'
+                }}
+                onClick={() => setIsMenuOpen(false)}>라운딩모집</Link>
+                <Link to="/golf-courses" style={{
+                  display: 'block',
+                  padding: '0.75rem 1rem',
+                  color: '#1f2937',
+                  textDecoration: 'none',
+                  fontSize: '0.875rem'
+                }}
+                onClick={() => setIsMenuOpen(false)}>골프장정보</Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
