@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { SignInButton, useAuth } from '@clerk/clerk-react';
+import { SignInButton, SignOutButton, useAuth, UserButton } from '@clerk/clerk-react';
 
 const Home = () => {
   const { isSignedIn } = useAuth();
@@ -132,9 +132,70 @@ const Home = () => {
                   padding: '0.75rem 1rem',
                   color: '#1f2937',
                   textDecoration: 'none',
-                  fontSize: '0.875rem'
+                  fontSize: '0.875rem',
+                  borderBottom: '1px solid #f3f4f6'
                 }}
                 onClick={() => setIsMenuOpen(false)}>중고 장터</Link>
+                
+                {/* 구분선 */}
+                <div style={{
+                  borderTop: '2px solid #e5e7eb',
+                  margin: '0.5rem 0'
+                }}></div>
+                
+                {/* 로그인/로그아웃 섹션 */}
+                {!isSignedIn ? (
+                  <SignInButton>
+                    <button style={{
+                      display: 'block',
+                      width: '100%',
+                      padding: '0.75rem 1rem',
+                      color: '#059669',
+                      background: 'transparent',
+                      border: 'none',
+                      textAlign: 'left',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => setIsMenuOpen(false)}>
+                      로그인
+                    </button>
+                  </SignInButton>
+                ) : (
+                  <div>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '0.75rem 1rem',
+                      borderBottom: '1px solid #f3f4f6'
+                    }}>
+                      <UserButton afterSignOutUrl="/" />
+                      <span style={{
+                        marginLeft: '0.75rem',
+                        fontSize: '0.875rem',
+                        color: '#1f2937'
+                      }}>내 프로필</span>
+                    </div>
+                    <SignOutButton>
+                      <button style={{
+                        display: 'block',
+                        width: '100%',
+                        padding: '0.75rem 1rem',
+                        color: '#dc2626',
+                        background: 'transparent',
+                        border: 'none',
+                        textAlign: 'left',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer'
+                      }}
+                      onClick={() => setIsMenuOpen(false)}>
+                        로그아웃
+                      </button>
+                    </SignOutButton>
+                  </div>
+                )}
               </div>
             )}
           </div>
