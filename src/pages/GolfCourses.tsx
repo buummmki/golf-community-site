@@ -170,31 +170,31 @@ const GolfCourses = () => {
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
         }}>
           <div>
-            <h1 style={{
-              fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
-              fontWeight: '800',
-              background: 'linear-gradient(135deg, #ffffff, #f1f5f9)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              marginBottom: '1rem',
-              lineHeight: '1.1',
-              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))'
-            }}>
-              골프장 정보
-            </h1>
-            <p style={{
-              color: 'rgba(255, 255, 255, 0.9)',
-              fontSize: '1.25rem',
-              lineHeight: '1.6',
-              filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))',
-              fontWeight: '400'
-            }}>
+          <h1 style={{
+            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+            fontWeight: '800',
+            background: 'linear-gradient(135deg, #ffffff, #f1f5f9)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            marginBottom: '1rem',
+            lineHeight: '1.1',
+            filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))'
+          }}>
+            골프장 정보
+          </h1>
+          <p style={{
+            color: 'rgba(255, 255, 255, 0.9)',
+            fontSize: '1.25rem',
+            lineHeight: '1.6',
+            filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))',
+            fontWeight: '400'
+          }}>
               전국 프리미엄 골프장 정보와<br />
               실시간 예약 서비스를 확인하세요
-            </p>
+          </p>
           </div>
-          
+
           <div style={{
             background: 'rgba(255, 255, 255, 0.1)',
             padding: '1.5rem',
@@ -203,37 +203,37 @@ const GolfCourses = () => {
           }}>
             <div style={{ color: 'white', fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>
               {golfCourses.length}개
-            </div>
+                  </div>
             <div style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.875rem' }}>
               등록된 골프장
-            </div>
-          </div>
-        </div>
+                    </div>
+                    </div>
+                      </div>
 
         {/* 검색 및 필터 */}
-        <div style={{
+          <div style={{
           background: 'rgba(255, 255, 255, 0.05)',
           backdropFilter: 'blur(10px)',
           borderRadius: '1.5rem',
           border: '1px solid rgba(255, 255, 255, 0.1)',
-          padding: '2rem',
+            padding: '2rem',
           marginBottom: '2rem'
         }}>
           {/* 검색바 */}
           <div style={{ marginBottom: '2rem' }}>
-            <input
-              type="text"
+              <input
+                type="text"
               placeholder="골프장명, 지역, 설명으로 검색..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
                 width: '100%',
-                padding: '1rem 1.5rem',
+                  padding: '1rem 1.5rem',
                 border: '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: '1rem',
+                  borderRadius: '1rem',
                 background: 'rgba(255, 255, 255, 0.1)',
                 color: 'white',
-                fontSize: '1rem',
+                  fontSize: '1rem',
                 outline: 'none',
                 boxSizing: 'border-box'
               }}
@@ -249,23 +249,23 @@ const GolfCourses = () => {
               <span style={{ color: 'white', fontWeight: '600', fontSize: '1rem' }}>지역:</span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                 {regions.map(region => (
-                  <button
+              <button
                     key={region}
                     onClick={() => setSelectedRegion(region)}
-                    style={{
+                style={{
                       padding: '0.5rem 1rem',
                       borderRadius: '0.75rem',
                       border: selectedRegion === region ? '2px solid #10b981' : '1px solid rgba(255, 255, 255, 0.3)',
                       background: selectedRegion === region ? '#10b981' : 'rgba(255, 255, 255, 0.1)',
-                      color: 'white',
+                  color: 'white',
                       fontSize: '0.875rem',
                       fontWeight: selectedRegion === region ? '600' : '400',
-                      cursor: 'pointer',
+                  cursor: 'pointer',
                       transition: 'all 0.2s ease'
                     }}
                   >
                     {region}
-                  </button>
+              </button>
                 ))}
               </div>
             </div>
@@ -275,49 +275,49 @@ const GolfCourses = () => {
               <span style={{ color: 'white', fontWeight: '600', fontSize: '1rem' }}>가격대:</span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                 {priceRanges.map(range => (
-                  <button
+                <button
                     key={range}
                     onClick={() => setSelectedPriceRange(range)}
-                    style={{
-                      padding: '0.5rem 1rem',
+                  style={{
+                    padding: '0.5rem 1rem',
                       borderRadius: '0.75rem',
                       border: selectedPriceRange === range ? '2px solid #10b981' : '1px solid rgba(255, 255, 255, 0.3)',
                       background: selectedPriceRange === range ? '#10b981' : 'rgba(255, 255, 255, 0.1)',
-                      color: 'white',
+                    color: 'white',
                       fontSize: '0.875rem',
                       fontWeight: selectedPriceRange === range ? '600' : '400',
-                      cursor: 'pointer',
+                    cursor: 'pointer',
                       transition: 'all 0.2s ease'
                     }}
                   >
                     {range}
-                  </button>
-                ))}
-              </div>
+                </button>
+              ))}
             </div>
+                  </div>
 
             {/* 평점 필터 */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <span style={{ color: 'white', fontWeight: '600', fontSize: '1rem' }}>평점:</span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                 {ratings.map(rating => (
-                  <button
+              <button
                     key={rating}
                     onClick={() => setSelectedRating(rating)}
-                    style={{
+                style={{
                       padding: '0.5rem 1rem',
-                      borderRadius: '0.75rem',
+                  borderRadius: '0.75rem',
                       border: selectedRating === rating ? '2px solid #10b981' : '1px solid rgba(255, 255, 255, 0.3)',
                       background: selectedRating === rating ? '#10b981' : 'rgba(255, 255, 255, 0.1)',
-                      color: 'white',
+                  color: 'white',
                       fontSize: '0.875rem',
                       fontWeight: selectedRating === rating ? '600' : '400',
-                      cursor: 'pointer',
+                  cursor: 'pointer',
                       transition: 'all 0.2s ease'
-                    }}
-                  >
+                }}
+              >
                     {rating}
-                  </button>
+              </button>
                 ))}
               </div>
             </div>
@@ -365,28 +365,28 @@ const GolfCourses = () => {
             </div>
           ) : (
             filteredCourses.map((course) => (
-              <div
-                key={course.id}
+                <div
+                  key={course.id}
                 onClick={() => setSelectedCourse(course)}
-                style={{
-                  background: 'rgba(255, 255, 255, 0.95)',
-                  borderRadius: '1.5rem',
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.95)',
+                    borderRadius: '1.5rem',
                   padding: '2rem',
                   boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
-                  transition: 'all 0.3s ease',
+                    transition: 'all 0.3s ease',
                   cursor: 'pointer',
                   backdropFilter: 'blur(20px)'
-                }}
-                onMouseEnter={(e) => {
+                  }}
+                  onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-4px)';
                   e.currentTarget.style.boxShadow = '0 16px 40px rgba(0, 0, 0, 0.15)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
-                }}
-              >
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+                  }}
+                >
                 {/* 헤더 */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
                   <span style={{
@@ -400,17 +400,17 @@ const GolfCourses = () => {
                     {course.region}
                   </span>
                   {renderStars(course.rating)}
-                </div>
+                  </div>
 
                 {/* 골프장명 */}
                 <h3 style={{
                   fontSize: '1.5rem',
-                  fontWeight: '700',
-                  color: '#1f2937',
+                      fontWeight: '700',
+                      color: '#1f2937',
                   marginBottom: '0.5rem',
                   lineHeight: '1.4'
-                }}>
-                  {course.name}
+                    }}>
+                      {course.name}
                 </h3>
 
                 {/* 설명 */}
@@ -430,7 +430,7 @@ const GolfCourses = () => {
                 )}
 
                 {/* 정보 */}
-                <div style={{
+                    <div style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(2, 1fr)',
                   gap: '1rem',
@@ -451,7 +451,7 @@ const GolfCourses = () => {
                       {course.green_fee ? formatPrice(course.green_fee) : '문의'}
                     </div>
                   </div>
-                </div>
+                    </div>
 
                 {/* 시설 정보 */}
                 {course.facilities && course.facilities.length > 0 && (
@@ -498,8 +498,8 @@ const GolfCourses = () => {
               </div>
             ))
           )}
-        </div>
-      </div>
+            </div>
+          </div>
 
       {/* 골프장 상세 모달 */}
       {selectedCourse && (
@@ -531,7 +531,7 @@ const GolfCourses = () => {
               </h2>
               <button
                 onClick={() => setSelectedCourse(null)}
-                style={{
+                  style={{
                   background: 'none',
                   border: 'none',
                   fontSize: '1.5rem',
@@ -577,20 +577,20 @@ const GolfCourses = () => {
                     {selectedCourse.green_fee ? formatPrice(selectedCourse.green_fee) : '문의'}
                   </div>
                 </div>
-              </div>
+                    </div>
 
               {selectedCourse.address && (
                 <div style={{ marginBottom: '1rem' }}>
                   <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.25rem' }}>주소</div>
                   <div style={{ fontSize: '1rem', color: '#1f2937' }}>📍 {selectedCourse.address}</div>
-                </div>
+                    </div>
               )}
 
               {selectedCourse.phone && (
                 <div style={{ marginBottom: '1rem' }}>
                   <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.25rem' }}>연락처</div>
                   <div style={{ fontSize: '1rem', color: '#1f2937' }}>📞 {selectedCourse.phone}</div>
-                </div>
+                    </div>
               )}
 
               {selectedCourse.facilities && selectedCourse.facilities.length > 0 && (
@@ -598,27 +598,27 @@ const GolfCourses = () => {
                   <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.5rem' }}>편의시설</div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                     {selectedCourse.facilities.map((facility, index) => (
-                      <span
-                        key={index}
-                        style={{
+                        <span
+                          key={index}
+                          style={{
                           background: '#e0f2fe',
                           color: '#0369a1',
                           padding: '0.5rem 1rem',
                           borderRadius: '0.5rem',
                           fontSize: '0.875rem',
                           fontWeight: '500'
-                        }}
-                      >
-                        {facility}
-                      </span>
-                    ))}
+                          }}
+                        >
+                          {facility}
+                        </span>
+                      ))}
                   </div>
                 </div>
               )}
             </div>
-          </div>
-        </div>
-      )}
+            </div>
+            </div>
+          )}
     </div>
   );
 };

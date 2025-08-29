@@ -234,32 +234,32 @@ const Rounds = () => {
           </div>
           
           {isSignedIn && (
-            <button 
+          <button 
               onClick={() => setIsRoundFormOpen(true)}
-              style={{
+            style={{
                 background: 'linear-gradient(135deg, #10b981, #059669)',
-                color: 'white',
-                border: 'none',
+              color: 'white',
+              border: 'none',
                 padding: '1.25rem 2.5rem',
                 borderRadius: '1rem',
                 fontSize: '1.125rem',
-                fontWeight: '600',
-                cursor: 'pointer',
+              fontWeight: '600',
+              cursor: 'pointer',
                 boxShadow: '0 8px 25px rgba(16, 185, 129, 0.3)',
-                transition: 'all 0.3s ease',
+              transition: 'all 0.3s ease',
                 whiteSpace: 'nowrap'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
                 e.currentTarget.style.boxShadow = '0 12px 35px rgba(16, 185, 129, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
                 e.currentTarget.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.3)';
-              }}
-            >
+            }}
+          >
               + 모집 작성
-            </button>
+          </button>
           )}
         </div>
 
@@ -346,23 +346,23 @@ const Rounds = () => {
             </div>
           ) : (
             sortedRounds.map((round) => (
-              <div
-                key={round.id}
-                style={{
-                  background: 'rgba(255, 255, 255, 0.95)',
+            <div
+              key={round.id}
+              style={{
+                background: 'rgba(255, 255, 255, 0.95)',
                   borderRadius: '1.5rem',
-                  padding: '2rem',
+                padding: '2rem',
                   boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
-                  transition: 'all 0.3s ease',
+                transition: 'all 0.3s ease',
                   backdropFilter: 'blur(20px)'
-                }}
-                onMouseEnter={(e) => {
+              }}
+              onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-4px)';
                   e.currentTarget.style.boxShadow = '0 16px 40px rgba(0, 0, 0, 0.15)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
                   e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
                 }}
               >
@@ -409,22 +409,22 @@ const Rounds = () => {
 
                 {/* 설명 */}
                 {round.description && (
-                  <p style={{
-                    color: '#6b7280',
+              <p style={{
+                color: '#6b7280',
                     fontSize: '0.875rem',
-                    lineHeight: '1.6',
-                    marginBottom: '1.5rem',
+                lineHeight: '1.6',
+                marginBottom: '1.5rem',
                     overflow: 'hidden',
                     display: '-webkit-box',
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: 'vertical'
-                  }}>
-                    {round.description}
-                  </p>
+              }}>
+                {round.description}
+              </p>
                 )}
 
                 {/* 정보 */}
-                <div style={{
+              <div style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(2, 1fr)',
                   gap: '1rem',
@@ -447,60 +447,60 @@ const Rounds = () => {
                       </div>
                     </div>
                   )}
-                </div>
+        </div>
 
                 {/* 하단 */}
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                   borderTop: '1px solid #f3f4f6',
                   paddingTop: '1rem'
                 }}>
                   <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
                     모집자: {round.author_name}
-                  </div>
+              </div>
                   
                   {isSignedIn && round.status === 'recruiting' && (
                     <div>
                       {userParticipations.has(round.id) ? (
-                        <button
+                  <button
                           onClick={() => handleLeaveRound(round.id)}
-                          style={{
+                    style={{
                             padding: '0.5rem 1rem',
                             border: '1px solid #ef4444',
-                            borderRadius: '0.5rem',
-                            background: 'white',
+                      borderRadius: '0.5rem',
+                      background: 'white',
                             color: '#ef4444',
                             fontSize: '0.875rem',
                             fontWeight: '500',
-                            cursor: 'pointer'
-                          }}
-                        >
+                      cursor: 'pointer'
+                    }}
+                  >
                           참여 취소
-                        </button>
+                  </button>
                       ) : (
-                        <button
+                  <button
                           onClick={() => handleJoinRound(round.id)}
                           disabled={round.current_participants >= round.max_participants}
-                          style={{
+                    style={{
                             padding: '0.5rem 1rem',
-                            border: 'none',
-                            borderRadius: '0.5rem',
+                      border: 'none',
+                      borderRadius: '0.5rem',
                             background: round.current_participants >= round.max_participants ? '#9ca3af' : '#10b981',
-                            color: 'white',
+                      color: 'white',
                             fontSize: '0.875rem',
                             fontWeight: '500',
                             cursor: round.current_participants >= round.max_participants ? 'not-allowed' : 'pointer'
-                          }}
-                        >
+                    }}
+                  >
                           {round.current_participants >= round.max_participants ? '정원 마감' : '참여하기'}
-                        </button>
+                  </button>
                       )}
                     </div>
                   )}
                 </div>
-              </div>
+            </div>
             ))
           )}
         </div>

@@ -225,7 +225,7 @@ const Posts = () => {
               <option value="최신순" style={{ color: 'black' }}>최신순</option>
               <option value="조회순" style={{ color: 'black' }}>조회순</option>
             </select>
-          </div>
+        </div>
       </div>
 
         {/* 게시글 목록 */}

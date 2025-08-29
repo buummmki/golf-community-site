@@ -94,7 +94,7 @@ export const useGolfCourses = () => {
       setGolfCourses(prev => prev.map(course => 
         course.id === courseId ? { ...course, rating: newRating } : course
       ));
-
+      
       return { success: true, data };
     } catch (err) {
       console.error('골프장 평점 업데이트 실패:', err);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useAuth } from '@clerk/clerk-react';
+import Header from './components/Header';
 import Home from './pages/Home';
 import Posts from './pages/Posts';
 import Rounds from './pages/Rounds';
@@ -263,6 +264,7 @@ function App() {
   return (
     <Router>
       <div style={{ minHeight: '100vh' }}>
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/posts" element={<ProtectedRoute><Posts /></ProtectedRoute>} />
@@ -270,7 +272,7 @@ function App() {
           <Route path="/golf-courses" element={<ProtectedRoute><GolfCourses /></ProtectedRoute>} />
           <Route path="/market" element={<ProtectedRoute><Market /></ProtectedRoute>} />
         </Routes>
-    </div>
+      </div>
     </Router>
   );
 }

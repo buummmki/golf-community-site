@@ -32,14 +32,14 @@ const PostForm: React.FC<PostFormProps> = ({ onSubmit, onClose, isOpen }) => {
 
     setIsSubmitting(true);
     const result = await onSubmit(formData);
-    
-    if (result.success) {
+
+      if (result.success) {
       setFormData({ title: '', content: '', golf_course: '', region: '경기' });
-      onClose();
+        onClose();
       alert('게시글이 성공적으로 등록되었습니다!');
-    } else {
-      alert(result.error || '게시글 등록에 실패했습니다.');
-    }
+      } else {
+        alert(result.error || '게시글 등록에 실패했습니다.');
+      }
     
     setIsSubmitting(false);
   };
@@ -78,8 +78,8 @@ const PostForm: React.FC<PostFormProps> = ({ onSubmit, onClose, isOpen }) => {
           <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937', margin: 0 }}>
             골프장 후기 작성
           </h2>
-          <button
-            onClick={onClose}
+            <button
+              onClick={onClose}
             style={{
               background: 'none',
               border: 'none',
@@ -87,21 +87,21 @@ const PostForm: React.FC<PostFormProps> = ({ onSubmit, onClose, isOpen }) => {
               cursor: 'pointer',
               color: '#6b7280'
             }}
-          >
-            ×
-          </button>
-        </div>
+            >
+              ×
+            </button>
+          </div>
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1.5rem' }}>
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-              제목 *
-            </label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
+                제목 *
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
               placeholder="골프장 후기 제목을 입력하세요"
               style={{
                 width: '100%',
@@ -114,19 +114,19 @@ const PostForm: React.FC<PostFormProps> = ({ onSubmit, onClose, isOpen }) => {
               }}
               onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
               onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
-            />
-          </div>
+              />
+            </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div>
+              <div>
               <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
                 골프장명 *
-              </label>
-              <input
-                type="text"
-                name="golf_course"
-                value={formData.golf_course}
-                onChange={handleChange}
+                </label>
+                <input
+                  type="text"
+                  name="golf_course"
+                  value={formData.golf_course}
+                  onChange={handleChange}
                 placeholder="예: 스카이힐CC"
                 style={{
                   width: '100%',
@@ -139,8 +139,8 @@ const PostForm: React.FC<PostFormProps> = ({ onSubmit, onClose, isOpen }) => {
                 }}
                 onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
                 onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
-              />
-            </div>
+                />
+              </div>
 
             <div>
               <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
@@ -168,18 +168,18 @@ const PostForm: React.FC<PostFormProps> = ({ onSubmit, onClose, isOpen }) => {
                 ))}
               </select>
             </div>
-          </div>
+            </div>
 
           <div style={{ marginBottom: '2rem' }}>
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
               후기 내용 *
-            </label>
-            <textarea
-              name="content"
-              value={formData.content}
-              onChange={handleChange}
+              </label>
+              <textarea
+                name="content"
+                value={formData.content}
+                onChange={handleChange}
               placeholder="골프장 컨디션, 그린 상태, 추천 팁 등을 자세히 작성해주세요&#10;&#10;예시:&#10;그린: ★★★★★ (5/5) - 완벽한 스피드&#10;페어웨이: ★★★★☆ (4/5) - 상태 양호&#10;날씨: 맑음, 미풍&#10;&#10;TIP: 14번 홀에서 주의사항..."
-              rows={8}
+                rows={8}
               style={{
                 width: '100%',
                 padding: '0.75rem',
@@ -193,13 +193,13 @@ const PostForm: React.FC<PostFormProps> = ({ onSubmit, onClose, isOpen }) => {
               }}
               onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
               onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
-            />
-          </div>
+              />
+            </div>
 
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-            <button
-              type="button"
-              onClick={onClose}
+              <button
+                type="button"
+                onClick={onClose}
               style={{
                 padding: '0.75rem 1.5rem',
                 border: '1px solid #d1d5db',
@@ -209,11 +209,11 @@ const PostForm: React.FC<PostFormProps> = ({ onSubmit, onClose, isOpen }) => {
                 fontWeight: '500',
                 cursor: 'pointer'
               }}
-            >
-              취소
-            </button>
-            <button
-              type="submit"
+              >
+                취소
+              </button>
+              <button
+                type="submit"
               disabled={isSubmitting}
               style={{
                 padding: '0.75rem 1.5rem',
@@ -226,9 +226,9 @@ const PostForm: React.FC<PostFormProps> = ({ onSubmit, onClose, isOpen }) => {
               }}
             >
               {isSubmitting ? '등록 중...' : '등록하기'}
-            </button>
-          </div>
-        </form>
+              </button>
+            </div>
+          </form>
       </div>
     </div>
   );

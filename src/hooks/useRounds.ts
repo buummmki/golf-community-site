@@ -87,7 +87,7 @@ export const useRounds = () => {
     try {
       const { data, error } = await supabase
         .from(TABLES.ROUNDS)
-        .update({
+        .update({ 
           ...updates,
           updated_at: new Date().toISOString(),
         })

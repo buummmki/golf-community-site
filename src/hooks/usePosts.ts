@@ -111,7 +111,7 @@ export const usePosts = () => {
         .eq('author_id', userId); // 작성자만 삭제 가능
 
       if (error) throw error;
-
+      
       setPosts(prev => prev.filter(post => post.id !== postId));
       return { success: true };
     } catch (err) {

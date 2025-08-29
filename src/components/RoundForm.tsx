@@ -50,26 +50,26 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
 
     setIsSubmitting(true);
     const result = await onSubmit({
-      ...formData,
+        ...formData,
       green_fee: formData.green_fee || undefined,
-    });
-    
-    if (result.success) {
-      setFormData({
-        title: '',
-        description: '',
-        golf_course: '',
-        date: '',
-        time: '',
-        max_participants: 4,
+      });
+
+      if (result.success) {
+        setFormData({
+          title: '',
+          description: '',
+          golf_course: '',
+          date: '',
+          time: '',
+          max_participants: 4,
         green_fee: '',
         region: '경기',
-      });
-      onClose();
+        });
+        onClose();
       alert('라운딩 모집이 성공적으로 등록되었습니다!');
-    } else {
-      alert(result.error || '라운딩 모집 등록에 실패했습니다.');
-    }
+      } else {
+        alert(result.error || '라운딩 모집 등록에 실패했습니다.');
+      }
     
     setIsSubmitting(false);
   };
@@ -117,8 +117,8 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
           <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937', margin: 0 }}>
             라운딩 모집 작성
           </h2>
-          <button
-            onClick={onClose}
+            <button
+              onClick={onClose}
             style={{
               background: 'none',
               border: 'none',
@@ -126,21 +126,21 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
               cursor: 'pointer',
               color: '#6b7280'
             }}
-          >
-            ×
-          </button>
-        </div>
+            >
+              ×
+            </button>
+          </div>
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1.5rem' }}>
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-              제목 *
-            </label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
+                제목 *
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
               placeholder="예: 주말 조조 라운딩 모집"
               style={{
                 width: '100%',
@@ -153,19 +153,19 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
               }}
               onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
               onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
-            />
-          </div>
+              />
+            </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div>
+              <div>
               <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
                 골프장명 *
-              </label>
-              <input
-                type="text"
-                name="golf_course"
-                value={formData.golf_course}
-                onChange={handleChange}
+                </label>
+                <input
+                  type="text"
+                  name="golf_course"
+                  value={formData.golf_course}
+                  onChange={handleChange}
                 placeholder="예: 스카이힐CC"
                 style={{
                   width: '100%',
@@ -178,8 +178,8 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
                 }}
                 onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
                 onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
-              />
-            </div>
+                />
+              </div>
 
             <div>
               <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
@@ -207,18 +207,18 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
                 ))}
               </select>
             </div>
-          </div>
+            </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div>
+              <div>
               <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-                날짜 *
-              </label>
-              <input
-                type="date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
+                  날짜 *
+                </label>
+                <input
+                  type="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleChange}
                 min={getTodayDate()}
                 style={{
                   width: '100%',
@@ -231,18 +231,18 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
                 }}
                 onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
                 onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
-              />
-            </div>
+                />
+              </div>
 
-            <div>
+              <div>
               <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-                시간 *
-              </label>
-              <input
-                type="time"
-                name="time"
-                value={formData.time}
-                onChange={handleChange}
+                  시간 *
+                </label>
+                <input
+                  type="time"
+                  name="time"
+                  value={formData.time}
+                  onChange={handleChange}
                 style={{
                   width: '100%',
                   padding: '0.75rem',
@@ -257,14 +257,14 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
               />
             </div>
 
-            <div>
+              <div>
               <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
                 모집인원 *
-              </label>
-              <select
-                name="max_participants"
-                value={formData.max_participants}
-                onChange={handleChange}
+                </label>
+                <select
+                  name="max_participants"
+                  value={formData.max_participants}
+                  onChange={handleChange}
                 style={{
                   width: '100%',
                   padding: '0.75rem',
@@ -277,24 +277,24 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
                 }}
                 onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
                 onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
-              >
-                <option value={2}>2명</option>
-                <option value={3}>3명</option>
-                <option value={4}>4명</option>
+                >
+                  <option value={2}>2명</option>
+                  <option value={3}>3명</option>
+                  <option value={4}>4명</option>
                 <option value={8}>8명</option>
-              </select>
-            </div>
+                </select>
+              </div>
           </div>
 
           <div style={{ marginBottom: '1.5rem' }}>
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
               그린피 (선택)
-            </label>
-            <input
+                </label>
+                <input
               type="text"
-              name="green_fee"
-              value={formData.green_fee}
-              onChange={handleChange}
+                  name="green_fee"
+                  value={formData.green_fee}
+                  onChange={handleChange}
               placeholder="예: 12만원"
               style={{
                 width: '100%',
@@ -308,16 +308,16 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
               onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
               onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
             />
-          </div>
+            </div>
 
           <div style={{ marginBottom: '2rem' }}>
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
               상세 설명 (선택)
-            </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
               placeholder="라운딩에 대한 상세 정보를 입력하세요&#10;&#10;예시:&#10;- 조조 티타임으로 시원한 아침 라운딩&#10;- 초급~중급자 수준 환영&#10;- 매너 있는 분만 신청 부탁드립니다&#10;- 카트비 별도"
               rows={5}
               style={{
@@ -333,13 +333,13 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
               }}
               onFocus={(e) => { e.target.style.borderColor = '#10b981'; }}
               onBlur={(e) => { e.target.style.borderColor = '#d1d5db'; }}
-            />
-          </div>
+              />
+            </div>
 
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-            <button
-              type="button"
-              onClick={onClose}
+              <button
+                type="button"
+                onClick={onClose}
               style={{
                 padding: '0.75rem 1.5rem',
                 border: '1px solid #d1d5db',
@@ -349,11 +349,11 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
                 fontWeight: '500',
                 cursor: 'pointer'
               }}
-            >
-              취소
-            </button>
-            <button
-              type="submit"
+              >
+                취소
+              </button>
+              <button
+                type="submit"
               disabled={isSubmitting}
               style={{
                 padding: '0.75rem 1.5rem',
@@ -366,9 +366,9 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
               }}
             >
               {isSubmitting ? '등록 중...' : '등록하기'}
-            </button>
-          </div>
-        </form>
+              </button>
+            </div>
+          </form>
       </div>
     </div>
   );

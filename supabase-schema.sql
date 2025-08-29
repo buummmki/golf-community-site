@@ -175,3 +175,4 @@ INSERT INTO golf_rounds (title, golf_course, date, time, description, author_id,
 ('남서울CC 4인 라운딩', '남서울CC', CURRENT_DATE + INTERVAL '5 days', '11:00', '남서울에서 11시 티타임, 매너 좋으신 분 1명 추가 모집해요.', 'sample_user_5', '남서울단골', 4, '12만원', '경기'),
 ('제주 핀크스CC 골프여행', '핀크스CC', CURRENT_DATE + INTERVAL '15 days', '09:00', '제주도 골프여행 2박3일 일정입니다. 숙박, 렌트카 모두 준비되어 있어요.', 'sample_user_6', '제주여행러', 4, '35만원', '제주')
 ON CONFLICT DO NOTHING;
+
