@@ -206,7 +206,7 @@ const RoundForm: React.FC<RoundFormProps> = ({ onSubmit, onClose, isOpen }) => {
                   <option key={region} value={region}>{region}</option>
                 ))}
               </select>
-            </div>
+              </div>
             </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>

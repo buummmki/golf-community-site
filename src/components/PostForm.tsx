@@ -167,7 +167,7 @@ const PostForm: React.FC<PostFormProps> = ({ onSubmit, onClose, isOpen }) => {
                   <option key={region} value={region}>{region}</option>
                 ))}
               </select>
-            </div>
+              </div>
             </div>
 
           <div style={{ marginBottom: '2rem' }}>

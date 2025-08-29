@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <div 
       style={{
-        minHeight: '100vh',
+      minHeight: '100vh',
         background: 'linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%)',
         paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))',
         WebkitOverflowScrolling: 'touch'
@@ -28,9 +28,9 @@ const Home = () => {
         }}>
           GOLF LOOP
         </h1>
-        <p style={{
+            <p style={{
           fontSize: '1.25rem',
-          margin: 0,
+              margin: 0,
           opacity: 0.9,
           lineHeight: '1.6'
         }}>
@@ -205,7 +205,7 @@ const Home = () => {
               <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: 0 }}>중고 거래</p>
             </div>
           </Link>
-        </div>
+              </div>
 
         {/* 활동 통계 카드 */}
         <div style={{
@@ -221,11 +221,11 @@ const Home = () => {
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#10b981', marginBottom: '0.25rem' }}>1,234</div>
               <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>활성 멤버</div>
-            </div>
+              </div>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#3b82f6', marginBottom: '0.25rem' }}>856</div>
               <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>오늘 게시글</div>
-            </div>
+              </div>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#f59e0b', marginBottom: '0.25rem' }}>342</div>
               <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>라운딩 매칭</div>
@@ -248,7 +248,7 @@ const Home = () => {
                         <span style={{ marginLeft: '0.5rem' }}>골프 커뮤니티 오픈!</span>
                       </h3>
                                              <span style={{ float: 'right', fontSize: '0.875rem', color: '#6b7280' }}>2024-07-25</span>
-                    </div>
+          </div>
                   </Link>
                 </li>
                 <li style={{ padding: '1.5rem' }}>
@@ -259,11 +259,11 @@ const Home = () => {
                         <span style={{ marginLeft: '0.5rem' }}>첫 후기 작성 이벤트!</span>
                       </h3>
                       <span style={{ float: 'right', color: '#6b7280', fontSize: '0.875rem' }}>2024-07-24</span>
-                    </div>
+                </div>
                   </Link>
                 </li>
               </ul>
-            </div>
+                </div>
           </section>
         </div>
       </div>
@@ -294,7 +294,7 @@ const Home = () => {
               <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.006 3.006 0 0 0 16.76 6l-2.34.78A6.006 6.006 0 0 1 9 12v10h2v-5h2v5h7z"/>
             </svg>
             <span style={{ fontSize: '0.6rem', color: '#6b7280', marginTop: '0.25rem', fontWeight: '500' }}>라운딩</span>
-          </Link>
+                </Link>
           <Link to="/golf-courses" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0.5rem 0.25rem', borderRadius: '0.5rem', transition: 'all 0.2s' }}
           onMouseEnter={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}>
@@ -302,7 +302,7 @@ const Home = () => {
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
             </svg>
             <span style={{ fontSize: '0.6rem', color: '#6b7280', marginTop: '0.25rem', fontWeight: '500' }}>골프장</span>
-          </Link>
+                </Link>
           <Link to="/market" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0.5rem 0.25rem', borderRadius: '0.5rem', transition: 'all 0.2s' }}
           onMouseEnter={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}>
@@ -310,8 +310,8 @@ const Home = () => {
               <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
             </svg>
             <span style={{ fontSize: '0.6rem', color: '#6b7280', marginTop: '0.25rem', fontWeight: '500' }}>장터</span>
-          </Link>
-        </div>
+            </Link>
+          </div>
       </div>
     </div>
   );

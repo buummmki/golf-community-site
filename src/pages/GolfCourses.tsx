@@ -615,7 +615,7 @@ const GolfCourses = () => {
                   </div>
                 </div>
               )}
-            </div>
+              </div>
             </div>
             </div>
           )}
