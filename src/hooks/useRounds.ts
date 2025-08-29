@@ -6,9 +6,9 @@ export const useRounds = () => {
   const [rounds, setRounds] = useState<Round[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { userId, user } = useAuth();
+  const { userId } = useAuth();
 
-  // 라운딩 목록 불러오기
+  // ?�운??목록 불러?�기
   const fetchRounds = async () => {
     try {
       setLoading(true);
@@ -21,14 +21,14 @@ export const useRounds = () => {
 
       setRounds(data || []);
     } catch (err) {
-      console.error('라운딩 목록 불러오기 실패:', err);
-      setError(err instanceof Error ? err.message : '라운딩 목록을 불러오는데 실패했습니다.');
+      console.error('?�운??목록 불러?�기 ?�패:', err);
+      setError(err instanceof Error ? err.message : '?�운??목록??불러?�는???�패?�습?�다.');
     } finally {
       setLoading(false);
     }
   };
 
-  // 라운딩 생성
+  // ?�운???�성
   const createRound = async (roundData: {
     title: string;
     description: string;
@@ -40,7 +40,7 @@ export const useRounds = () => {
     region: string;
   }) => {
     if (!userId || !user) {
-      return { success: false, error: '로그인이 필요합니다.' };
+      return { success: false, error: '로그?�이 ?�요?�니??' };
     }
 
     try {
@@ -49,39 +49,38 @@ export const useRounds = () => {
         .insert({
           ...roundData,
           author_id: userId,
-          author_name: user.firstName || user.username || '익명',
-          current_participants: 1, // 작성자가 첫 번째 참여자
-          status: 'recruiting',
+          author_name: user.firstName || user.username || '?�명',
+          current_participants: 1, // ?�성?��? �?번째 참여??          status: 'recruiting',
         })
         .select()
         .single();
 
       if (error) throw error;
 
-      // 작성자를 참여자로 자동 추가
+      // ?�성?��? 참여?�로 ?�동 추�?
       await supabase
         .from(TABLES.ROUND_PARTICIPANTS)
         .insert({
           round_id: data.id,
           user_id: userId,
-          user_name: user.firstName || user.username || '익명',
+          user_name: user.firstName || user.username || '?�명',
         });
 
       setRounds(prev => [data, ...prev]);
       return { success: true, data };
     } catch (err) {
-      console.error('라운딩 생성 실패:', err);
+      console.error('?�운???�성 ?�패:', err);
       return { 
         success: false, 
-        error: err instanceof Error ? err.message : '라운딩 생성에 실패했습니다.' 
+        error: err instanceof Error ? err.message : '?�운???�성???�패?�습?�다.' 
       };
     }
   };
 
-  // 라운딩 수정
+  // ?�운???�정
   const updateRound = async (roundId: string, updates: Partial<Round>) => {
     if (!userId) {
-      return { success: false, error: '로그인이 필요합니다.' };
+      return { success: false, error: '로그?�이 ?�요?�니??' };
     }
 
     try {
@@ -92,8 +91,7 @@ export const useRounds = () => {
           updated_at: new Date().toISOString(),
         })
         .eq('id', roundId)
-        .eq('author_id', userId) // 작성자만 수정 가능
-        .select()
+        .eq('author_id', userId) // ?�성?�만 ?�정 가??        .select()
         .single();
 
       if (error) throw error;
@@ -103,18 +101,18 @@ export const useRounds = () => {
       ));
       return { success: true, data };
     } catch (err) {
-      console.error('라운딩 수정 실패:', err);
+      console.error('?�운???�정 ?�패:', err);
       return { 
         success: false, 
-        error: err instanceof Error ? err.message : '라운딩 수정에 실패했습니다.' 
+        error: err instanceof Error ? err.message : '?�운???�정???�패?�습?�다.' 
       };
     }
   };
 
-  // 라운딩 삭제
+  // ?�운????��
   const deleteRound = async (roundId: string) => {
     if (!userId) {
-      return { success: false, error: '로그인이 필요합니다.' };
+      return { success: false, error: '로그?�이 ?�요?�니??' };
     }
 
     try {
@@ -122,29 +120,28 @@ export const useRounds = () => {
         .from(TABLES.ROUNDS)
         .delete()
         .eq('id', roundId)
-        .eq('author_id', userId); // 작성자만 삭제 가능
-
+        .eq('author_id', userId); // ?�성?�만 ??�� 가??
       if (error) throw error;
 
       setRounds(prev => prev.filter(round => round.id !== roundId));
       return { success: true };
     } catch (err) {
-      console.error('라운딩 삭제 실패:', err);
+      console.error('?�운????�� ?�패:', err);
       return { 
         success: false, 
-        error: err instanceof Error ? err.message : '라운딩 삭제에 실패했습니다.' 
+        error: err instanceof Error ? err.message : '?�운????��???�패?�습?�다.' 
       };
     }
   };
 
-  // 라운딩 참여
+  // ?�운??참여
   const joinRound = async (roundId: string) => {
     if (!userId || !user) {
-      return { success: false, error: '로그인이 필요합니다.' };
+      return { success: false, error: '로그?�이 ?�요?�니??' };
     }
 
     try {
-      // 현재 라운딩 정보 확인
+      // ?�재 ?�운???�보 ?�인
       const { data: roundData, error: roundError } = await supabase
         .from(TABLES.ROUNDS)
         .select('*')
@@ -154,10 +151,10 @@ export const useRounds = () => {
       if (roundError) throw roundError;
 
       if (roundData.current_participants >= roundData.max_participants) {
-        return { success: false, error: '이미 정원이 마감되었습니다.' };
+        return { success: false, error: '?��? ?�원??마감?�었?�니??' };
       }
 
-      // 이미 참여했는지 확인
+      // ?��? 참여?�는지 ?�인
       const { data: existingParticipant } = await supabase
         .from(TABLES.ROUND_PARTICIPANTS)
         .select('*')
@@ -166,21 +163,21 @@ export const useRounds = () => {
         .single();
 
       if (existingParticipant) {
-        return { success: false, error: '이미 참여 중인 라운딩입니다.' };
+        return { success: false, error: '?��? 참여 중인 ?�운?�입?�다.' };
       }
 
-      // 참여자 추가
+      // 참여??추�?
       const { error: participantError } = await supabase
         .from(TABLES.ROUND_PARTICIPANTS)
         .insert({
           round_id: roundId,
           user_id: userId,
-          user_name: user.firstName || user.username || '익명',
+          user_name: user.firstName || user.username || '?�명',
         });
 
       if (participantError) throw participantError;
 
-      // 참여자 수 업데이트
+      // 참여?????�데?�트
       const newParticipantCount = roundData.current_participants + 1;
       const { data: updatedRound, error: updateError } = await supabase
         .from(TABLES.ROUNDS)
@@ -200,22 +197,22 @@ export const useRounds = () => {
 
       return { success: true };
     } catch (err) {
-      console.error('라운딩 참여 실패:', err);
+      console.error('?�운??참여 ?�패:', err);
       return { 
         success: false, 
-        error: err instanceof Error ? err.message : '라운딩 참여에 실패했습니다.' 
+        error: err instanceof Error ? err.message : '?�운??참여???�패?�습?�다.' 
       };
     }
   };
 
-  // 라운딩 탈퇴
+  // ?�운???�퇴
   const leaveRound = async (roundId: string) => {
     if (!userId) {
-      return { success: false, error: '로그인이 필요합니다.' };
+      return { success: false, error: '로그?�이 ?�요?�니??' };
     }
 
     try {
-      // 라운딩 작성자인지 확인
+      // ?�운???�성?�인지 ?�인
       const { data: roundData } = await supabase
         .from(TABLES.ROUNDS)
         .select('author_id, current_participants')
@@ -223,10 +220,10 @@ export const useRounds = () => {
         .single();
 
       if (roundData?.author_id === userId) {
-        return { success: false, error: '라운딩 작성자는 탈퇴할 수 없습니다.' };
+        return { success: false, error: '?�운???�성?�는 ?�퇴?????�습?�다.' };
       }
 
-      // 참여자 삭제
+      // 참여????��
       const { error: deleteError } = await supabase
         .from(TABLES.ROUND_PARTICIPANTS)
         .delete()
@@ -235,15 +232,14 @@ export const useRounds = () => {
 
       if (deleteError) throw deleteError;
 
-      // 참여자 수 업데이트
+      // 참여?????�데?�트
       if (roundData) {
         const newParticipantCount = roundData.current_participants - 1;
         const { data: updatedRound, error: updateError } = await supabase
           .from(TABLES.ROUNDS)
           .update({
             current_participants: newParticipantCount,
-            status: 'recruiting' // 한 명이라도 빠지면 다시 모집중
-          })
+            status: 'recruiting' // ??명이?�도 빠�?�??�시 모집�?          })
           .eq('id', roundId)
           .select()
           .single();
@@ -257,15 +253,15 @@ export const useRounds = () => {
 
       return { success: true };
     } catch (err) {
-      console.error('라운딩 탈퇴 실패:', err);
+      console.error('?�운???�퇴 ?�패:', err);
       return { 
         success: false, 
-        error: err instanceof Error ? err.message : '라운딩 탈퇴에 실패했습니다.' 
+        error: err instanceof Error ? err.message : '?�운???�퇴???�패?�습?�다.' 
       };
     }
   };
 
-  // 라운딩 참여자 목록 조회
+  // ?�운??참여??목록 조회
   const getRoundParticipants = async (roundId: string) => {
     try {
       const { data, error } = await supabase
@@ -278,31 +274,28 @@ export const useRounds = () => {
 
       return { success: true, data: data || [] };
     } catch (err) {
-      console.error('참여자 목록 조회 실패:', err);
+      console.error('참여??목록 조회 ?�패:', err);
       return { 
         success: false, 
-        error: err instanceof Error ? err.message : '참여자 목록을 불러오는데 실패했습니다.',
+        error: err instanceof Error ? err.message : '참여??목록??불러?�는???�패?�습?�다.',
         data: []
       };
     }
   };
 
-  // 지역별 필터링
-  const getRoundsByRegion = (region: string) => {
+  // 지??�� ?�터�?  const getRoundsByRegion = (region: string) => {
     return rounds.filter(round => round.region === region);
   };
 
-  // 상태별 필터링
-  const getRoundsByStatus = (status: 'recruiting' | 'full' | 'completed') => {
+  // ?�태�??�터�?  const getRoundsByStatus = (status: 'recruiting' | 'full' | 'completed') => {
     return rounds.filter(round => round.status === status);
   };
 
-  // 날짜별 필터링
-  const getRoundsByDate = (date: string) => {
+  // ?�짜�??�터�?  const getRoundsByDate = (date: string) => {
     return rounds.filter(round => round.date === date);
   };
 
-  // 사용자가 참여 중인 라운딩 확인
+  // ?�용?��? 참여 중인 ?�운???�인
   const isUserParticipating = async (roundId: string) => {
     if (!userId) return false;
 
