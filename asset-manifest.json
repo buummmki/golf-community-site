@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/golf-community-site/static/css/main.7db41aa3.css",
+    "main.js": "/golf-community-site/static/js/main.100028f6.js",
+    "static/js/453.2a05ee2a.chunk.js": "/golf-community-site/static/js/453.2a05ee2a.chunk.js",
+    "index.html": "/golf-community-site/index.html",
+    "main.7db41aa3.css.map": "/golf-community-site/static/css/main.7db41aa3.css.map",
+    "main.100028f6.js.map": "/golf-community-site/static/js/main.100028f6.js.map",
+    "453.2a05ee2a.chunk.js.map": "/golf-community-site/static/js/453.2a05ee2a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7db41aa3.css",
+    "static/js/main.100028f6.js"
+  ]
+}
