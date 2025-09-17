@@ -4,11 +4,40 @@ import { useAuth } from '@clerk/clerk-react';
 import RoundForm from '../components/RoundForm';
 import { Round } from '../lib/supabase';
 
+// 리퀴드 글래스 애니메이션 CSS
+const liquidGlassStyles = `
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+  }
+  
+  @keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+  }
+  
+  @keyframes liquidFlow {
+    0% { clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 85% 100%, 0% 100%); }
+    25% { clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 90% 100%, 0% 100%); }
+    50% { clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 80% 100%, 0% 100%); }
+    75% { clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 95% 100%, 0% 100%); }
+    100% { clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 85% 100%, 0% 100%); }
+  }
+`;
+
+// CSS 스타일 주입
+if (typeof document !== 'undefined') {
+  const styleSheet = document.createElement('style');
+  styleSheet.textContent = liquidGlassStyles;
+  document.head.appendChild(styleSheet);
+}
+
 const Rounds = () => {
   const [selectedRegion, setSelectedRegion] = useState('전체');
   const [selectedStatus, setSelectedStatus] = useState('전체');
   const [isRoundFormOpen, setIsRoundFormOpen] = useState(false);
   const [userParticipations, setUserParticipations] = useState<Set<string>>(new Set());
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { isSignedIn, userId } = useAuth();
   
   const {
@@ -25,6 +54,16 @@ const Rounds = () => {
 
   const regions = ['전체', '경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주', '인천', '서울'];
   const statuses = ['전체', '모집중', '모집완료', '완료'];
+
+  // 마우스 추적
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   // 사용자 참여 상태 확인
   useEffect(() => {
@@ -148,17 +187,46 @@ const Rounds = () => {
 
   if (loading) {
     return (
-      <div style={{ 
-        minHeight: '100vh', 
-        background: 'linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>라운딩 모집을 불러오는 중...</div>
-          <div style={{ fontSize: '1rem', opacity: 0.8 }}>잠시만 기다려주세요</div>
+      <div 
+        style={{
+          minHeight: '100vh',
+          background: `
+            radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, 
+              rgba(34, 197, 94, 0.3) 0%, 
+              rgba(22, 163, 74, 0.2) 25%, 
+              rgba(16, 120, 87, 0.1) 50%, 
+              rgba(6, 95, 70, 0.05) 75%, 
+              transparent 100%),
+            linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%)
+          `,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2rem'
+        }}
+      >
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(20px)',
+          borderRadius: '2rem',
+          padding: '3rem',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '-50%',
+            left: '-50%',
+            width: '200%',
+            height: '200%',
+            background: 'linear-gradient(45deg, transparent, rgba(34, 197, 94, 0.1), transparent)',
+            animation: 'shimmer 3s ease-in-out infinite',
+            transform: 'rotate(45deg)'
+          }} />
+          <div style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'white', position: 'relative', zIndex: 2 }}>라운딩 모집을 불러오는 중...</div>
+          <div style={{ fontSize: '1rem', opacity: 0.8, color: 'white', position: 'relative', zIndex: 2 }}>잠시만 기다려주세요</div>
         </div>
       </div>
     );
@@ -166,33 +234,116 @@ const Rounds = () => {
 
   if (error) {
     return (
-      <div style={{ 
-        minHeight: '100vh', 
-        background: 'linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>오류가 발생했습니다</div>
-          <div style={{ fontSize: '1rem', opacity: 0.8 }}>{error}</div>
+      <div 
+        style={{
+          minHeight: '100vh',
+          background: `
+            radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, 
+              rgba(239, 68, 68, 0.3) 0%, 
+              rgba(220, 38, 38, 0.2) 25%, 
+              rgba(185, 28, 28, 0.1) 50%, 
+              rgba(153, 27, 27, 0.05) 75%, 
+              transparent 100%),
+            linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%)
+          `,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2rem'
+        }}
+      >
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(20px)',
+          borderRadius: '2rem',
+          padding: '3rem',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '-50%',
+            left: '-50%',
+            width: '200%',
+            height: '200%',
+            background: 'linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent)',
+            animation: 'shimmer 3s ease-in-out infinite',
+            transform: 'rotate(45deg)'
+          }} />
+          <div style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'white', position: 'relative', zIndex: 2 }}>오류가 발생했습니다</div>
+          <div style={{ fontSize: '1rem', opacity: 0.8, color: 'white', position: 'relative', zIndex: 2 }}>{error}</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%)',
-      paddingTop: '2rem',
-      paddingBottom: '6rem'
-    }}>
+    <div 
+      style={{
+        minHeight: '100vh',
+        background: `
+          radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, 
+            rgba(34, 197, 94, 0.3) 0%, 
+            rgba(22, 163, 74, 0.2) 25%, 
+            rgba(16, 120, 87, 0.1) 50%, 
+            rgba(6, 95, 70, 0.05) 75%, 
+            transparent 100%),
+          linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%)
+        `,
+        paddingTop: '2rem',
+        paddingBottom: '2rem',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+    >
+      {/* 리퀴드 글래스 배경 요소들 */}
+      <div style={{
+        position: 'absolute',
+        top: '5%',
+        left: '5%',
+        width: '200px',
+        height: '200px',
+        background: 'linear-gradient(45deg, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.05))',
+        borderRadius: '50%',
+        filter: 'blur(40px)',
+        animation: 'float 8s ease-in-out infinite',
+        clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)'
+      }} />
+      
+      <div style={{
+        position: 'absolute',
+        top: '20%',
+        right: '10%',
+        width: '150px',
+        height: '150px',
+        background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05))',
+        borderRadius: '50%',
+        filter: 'blur(30px)',
+        animation: 'float 10s ease-in-out infinite reverse',
+        clipPath: 'polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%)'
+      }} />
+
+      <div style={{
+        position: 'absolute',
+        bottom: '15%',
+        left: '15%',
+        width: '120px',
+        height: '120px',
+        background: 'linear-gradient(225deg, rgba(6, 182, 212, 0.1), rgba(8, 145, 178, 0.05))',
+        borderRadius: '50%',
+        filter: 'blur(25px)',
+        animation: 'float 12s ease-in-out infinite',
+        clipPath: 'polygon(40% 0%, 60% 0%, 100% 40%, 100% 60%, 60% 100%, 40% 100%, 0% 60%, 0% 40%)'
+      }} />
+
       <div style={{
         maxWidth: '1280px',
         margin: '0 auto',
-        padding: '0 1rem'
+        padding: '0 1rem',
+        position: 'relative',
+        zIndex: 10
       }}>
         {/* 헤더 */}
         <div style={{

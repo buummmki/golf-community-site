@@ -1,14 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePosts } from '../hooks/usePosts';
 import { useAuth } from '@clerk/clerk-react';
 import PostForm from '../components/PostForm';
 import { Post } from '../lib/supabase';
 
+// 리퀴드 글래스 애니메이션 CSS
+const liquidGlassStyles = `
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+  }
+  
+  @keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+  }
+  
+  @keyframes liquidFlow {
+    0% { clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 85% 100%, 0% 100%); }
+    25% { clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 90% 100%, 0% 100%); }
+    50% { clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 80% 100%, 0% 100%); }
+    75% { clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 95% 100%, 0% 100%); }
+    100% { clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 85% 100%, 0% 100%); }
+  }
+`;
+
+// CSS 스타일 주입
+if (typeof document !== 'undefined') {
+  const styleSheet = document.createElement('style');
+  styleSheet.textContent = liquidGlassStyles;
+  document.head.appendChild(styleSheet);
+}
+
 const Posts = () => {
   const [selectedRegion, setSelectedRegion] = useState('전체');
   const [selectedSort, setSelectedSort] = useState('최신순');
   const [isPostFormOpen, setIsPostFormOpen] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { isSignedIn } = useAuth();
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
   
   const {
     posts,
@@ -55,17 +93,46 @@ const Posts = () => {
 
   if (loading) {
     return (
-      <div style={{ 
-        minHeight: '100vh', 
-        background: 'linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>게시글을 불러오는 중...</div>
-          <div style={{ fontSize: '1rem', opacity: 0.8 }}>잠시만 기다려주세요</div>
+      <div 
+        style={{
+          minHeight: '100vh',
+          background: `
+            radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, 
+              rgba(16, 185, 129, 0.3) 0%, 
+              rgba(5, 150, 105, 0.2) 25%, 
+              rgba(4, 120, 87, 0.1) 50%, 
+              rgba(6, 95, 70, 0.05) 75%, 
+              transparent 100%),
+            linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%)
+          `,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2rem'
+        }}
+      >
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(20px)',
+          borderRadius: '2rem',
+          padding: '3rem',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '-50%',
+            left: '-50%',
+            width: '200%',
+            height: '200%',
+            background: 'linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent)',
+            animation: 'shimmer 3s ease-in-out infinite',
+            transform: 'rotate(45deg)'
+          }} />
+          <div style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'white', position: 'relative', zIndex: 2 }}>게시글을 불러오는 중...</div>
+          <div style={{ fontSize: '1rem', opacity: 0.8, color: 'white', position: 'relative', zIndex: 2 }}>잠시만 기다려주세요</div>
         </div>
       </div>
     );
@@ -73,33 +140,116 @@ const Posts = () => {
 
   if (error) {
     return (
-      <div style={{ 
-        minHeight: '100vh', 
-        background: 'linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>오류가 발생했습니다</div>
-          <div style={{ fontSize: '1rem', opacity: 0.8 }}>{error}</div>
+      <div 
+        style={{
+          minHeight: '100vh',
+          background: `
+            radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, 
+              rgba(239, 68, 68, 0.3) 0%, 
+              rgba(220, 38, 38, 0.2) 25%, 
+              rgba(185, 28, 28, 0.1) 50%, 
+              rgba(153, 27, 27, 0.05) 75%, 
+              transparent 100%),
+            linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%)
+          `,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2rem'
+        }}
+      >
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(20px)',
+          borderRadius: '2rem',
+          padding: '3rem',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '-50%',
+            left: '-50%',
+            width: '200%',
+            height: '200%',
+            background: 'linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent)',
+            animation: 'shimmer 3s ease-in-out infinite',
+            transform: 'rotate(45deg)'
+          }} />
+          <div style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'white', position: 'relative', zIndex: 2 }}>오류가 발생했습니다</div>
+          <div style={{ fontSize: '1rem', opacity: 0.8, color: 'white', position: 'relative', zIndex: 2 }}>{error}</div>
         </div>
       </div>
     );
   }
 
     return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%)',
-      paddingTop: '2rem',
-      paddingBottom: '6rem'
-    }}>
+    <div 
+      style={{
+        minHeight: '100vh',
+        background: `
+          radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, 
+            rgba(16, 185, 129, 0.3) 0%, 
+            rgba(5, 150, 105, 0.2) 25%, 
+            rgba(4, 120, 87, 0.1) 50%, 
+            rgba(6, 95, 70, 0.05) 75%, 
+            transparent 100%),
+          linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%)
+        `,
+        paddingTop: '2rem',
+        paddingBottom: '2rem',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+    >
+      {/* 리퀴드 글래스 배경 요소들 */}
+      <div style={{
+        position: 'absolute',
+        top: '5%',
+        left: '5%',
+        width: '200px',
+        height: '200px',
+        background: 'linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05))',
+        borderRadius: '50%',
+        filter: 'blur(40px)',
+        animation: 'float 8s ease-in-out infinite',
+        clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)'
+      }} />
+      
+      <div style={{
+        position: 'absolute',
+        top: '20%',
+        right: '10%',
+        width: '150px',
+        height: '150px',
+        background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.05))',
+        borderRadius: '50%',
+        filter: 'blur(30px)',
+        animation: 'float 10s ease-in-out infinite reverse',
+        clipPath: 'polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%)'
+      }} />
+
+      <div style={{
+        position: 'absolute',
+        bottom: '15%',
+        left: '15%',
+        width: '120px',
+        height: '120px',
+        background: 'linear-gradient(225deg, rgba(6, 182, 212, 0.1), rgba(8, 145, 178, 0.05))',
+        borderRadius: '50%',
+        filter: 'blur(25px)',
+        animation: 'float 12s ease-in-out infinite',
+        clipPath: 'polygon(40% 0%, 60% 0%, 100% 40%, 100% 60%, 60% 100%, 40% 100%, 0% 60%, 0% 40%)'
+      }} />
+
       <div style={{
         maxWidth: '1280px',
         margin: '0 auto',
-        padding: '0 1rem'
+        padding: '0 1rem',
+        position: 'relative',
+        zIndex: 10
       }}>
         {/* 헤더 */}
         <div style={{
@@ -252,25 +402,42 @@ const Posts = () => {
               key={post.id}
                 onClick={() => handlePostClick(post.id)}
               style={{
-                  background: 'rgba(255, 255, 255, 0.95)',
-                borderRadius: '1.5rem',
+                  background: 'rgba(255, 255, 255, 0.08)',
+                borderRadius: '2rem',
                 padding: '2rem',
                   boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  transition: 'all 0.3s ease',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                 cursor: 'pointer',
-                  backdropFilter: 'blur(20px)'
+                  backdropFilter: 'blur(20px)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  clipPath: 'polygon(0% 0%, 100% 0%, 100% 90%, 90% 100%, 0% 100%)'
               }}
               onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-8px)';
-                  e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.15)';
+                  e.currentTarget.style.transform = 'translateY(-8px) scale(1.02) rotateX(5deg)';
+                  e.currentTarget.style.boxShadow = '0 20px 40px rgba(16, 185, 129, 0.2)';
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.transform = 'translateY(0) scale(1) rotateX(0deg)';
                   e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
-                }}
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+              }}
               >
-                <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                {/* 리퀴드 글래스 내부 효과 */}
+                <div style={{
+                  position: 'absolute',
+                  top: '-50%',
+                  left: '-50%',
+                  width: '200%',
+                  height: '200%',
+                  background: 'linear-gradient(45deg, transparent, rgba(16, 185, 129, 0.1), transparent)',
+                  animation: 'shimmer 4s ease-in-out infinite',
+                  transform: 'rotate(45deg)'
+                }} />
+
+                <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', position: 'relative', zIndex: 2 }}>
                     <span style={{
                     background: 'linear-gradient(135deg, #10b981, #059669)',
                       color: 'white',
@@ -296,23 +463,28 @@ const Posts = () => {
                 <h3 style={{
                   fontSize: '1.25rem',
                   fontWeight: '700',
-                  color: '#1f2937',
+                  color: 'white',
                   marginBottom: '1rem',
                   lineHeight: '1.4',
-                  wordBreak: 'keep-all'
+                  wordBreak: 'keep-all',
+                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+                  position: 'relative',
+                  zIndex: 2
                 }}>
                   {post.title}
                 </h3>
 
               <p style={{
-                  color: '#6b7280',
+                  color: 'rgba(255, 255, 255, 0.8)',
                   fontSize: '0.875rem',
                 lineHeight: '1.6',
                 marginBottom: '1.5rem',
                   overflow: 'hidden',
                   display: '-webkit-box',
                   WebkitLineClamp: 3,
-                  WebkitBoxOrient: 'vertical'
+                  WebkitBoxOrient: 'vertical',
+                  position: 'relative',
+                  zIndex: 2
               }}>
                 {post.content}
               </p>
@@ -321,19 +493,21 @@ const Posts = () => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                  borderTop: '1px solid #f3f4f6',
-                  paddingTop: '1rem'
+                  borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                  paddingTop: '1rem',
+                  position: 'relative',
+                  zIndex: 2
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                    <span style={{ fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.7)' }}>
                       {post.author_name}
                     </span>
-                    <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.5)' }}>
                       {formatDate(post.created_at)}
                   </span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <span style={{ fontSize: '0.75rem', color: '#9ca3af', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.5)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                       <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
                       </svg>
