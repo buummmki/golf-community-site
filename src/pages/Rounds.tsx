@@ -657,6 +657,175 @@ const Rounds = () => {
         </div>
       </div>
 
+      {/* 하단 네비게이션 - 리퀴드 글래스 스타일 */}
+      <div style={{ 
+        position: 'fixed', 
+        bottom: 0, 
+        left: 0, 
+        right: 0, 
+        background: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(20px)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.2)', 
+        padding: '1rem 0 calc(1rem + env(safe-area-inset-bottom))', 
+        zIndex: 50, 
+        boxShadow: '0 -8px 32px rgba(0, 0, 0, 0.1)',
+        clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)'
+      }}>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(5, 1fr)', 
+          gap: '0.5rem', 
+          maxWidth: '100%', 
+          margin: '0 auto', 
+          padding: '0 1rem' 
+        }}>
+          <Link to="/" style={{ 
+            textDecoration: 'none', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            padding: '1rem 0.5rem', 
+            borderRadius: '1.5rem', 
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+          onMouseEnter={(e) => { 
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+            e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(255, 255, 255, 0.2)';
+          }}
+          onMouseLeave={(e) => { 
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}>
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.8)', marginTop: '0.5rem', fontWeight: '500' }}>홈</span>
+          </Link>
+          
+          <Link to="/posts" style={{ 
+            textDecoration: 'none', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            padding: '1rem 0.5rem', 
+            borderRadius: '1.5rem', 
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+          onMouseEnter={(e) => { 
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+            e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(255, 255, 255, 0.2)';
+          }}
+          onMouseLeave={(e) => { 
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}>
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+            </svg>
+            <span style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.8)', marginTop: '0.5rem', fontWeight: '500' }}>게시판</span>
+          </Link>
+          
+          <Link to="/rounds" style={{ 
+            textDecoration: 'none', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            padding: '1rem 0.5rem', 
+            borderRadius: '1.5rem', 
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            background: 'rgba(34, 197, 94, 0.2)',
+            border: '1px solid rgba(34, 197, 94, 0.3)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+          onMouseEnter={(e) => { 
+            e.currentTarget.style.background = 'rgba(34, 197, 94, 0.3)';
+            e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(34, 197, 94, 0.3)';
+          }}
+          onMouseLeave={(e) => { 
+            e.currentTarget.style.background = 'rgba(34, 197, 94, 0.2)';
+            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}>
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#22c55e' }}>
+              <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.006 3.006 0 0 0 16.76 6l-2.34.78A6.006 6.006 0 0 1 9 12v10h2v-5h2v5h7z"/>
+            </svg>
+            <span style={{ fontSize: '0.75rem', color: '#22c55e', marginTop: '0.5rem', fontWeight: '600' }}>라운딩</span>
+          </Link>
+          
+          <Link to="/golf-courses" style={{ 
+            textDecoration: 'none', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            padding: '1rem 0.5rem', 
+            borderRadius: '1.5rem', 
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+          onMouseEnter={(e) => { 
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+            e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(255, 255, 255, 0.2)';
+          }}
+          onMouseLeave={(e) => { 
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}>
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            <span style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.8)', marginTop: '0.5rem', fontWeight: '500' }}>골프장</span>
+          </Link>
+          
+          <Link to="/market" style={{ 
+            textDecoration: 'none', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            padding: '1rem 0.5rem', 
+            borderRadius: '1.5rem', 
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+          onMouseEnter={(e) => { 
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+            e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(255, 255, 255, 0.2)';
+          }}
+          onMouseLeave={(e) => { 
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}>
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+              <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+            <span style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.8)', marginTop: '0.5rem', fontWeight: '500' }}>장터</span>
+          </Link>
+        </div>
+      </div>
+
       {/* 라운딩 작성 폼 */}
       <RoundForm
         isOpen={isRoundFormOpen}
